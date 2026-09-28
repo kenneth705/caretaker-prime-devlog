@@ -318,8 +318,14 @@
     }
   
     /* ── Caretaker Prime additions (built only from template tokens) ── */
-    /* keep content above the glass sheen so light-theme text isn't washed out */
-    .glass > *:not(.lanes) { position: relative; z-index: 1; }
+    /* Performance: the page has ~60 glass panels. Only top-level panels blur the
+       backdrop; glass nested inside glass gets a plain translucent fill (a nested
+       backdrop-filter re-blurs an already-blurred layer every frame, which flickers). */
+    .glass { isolation: isolate; }
+    .glass::after { z-index: -1; }            /* sheen under the content, not over the text */
+    .glass .glass { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--glass-raised); }
+    .glass .glass.glass-raised { background: var(--glass-raised); }
+    #dust { will-change: transform; transform: translateZ(0); contain: strict; }
     .hero { padding-top: 56px; }
     .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; align-items: center; }
     .hero-art { border-radius: var(--radius-xl); overflow: hidden; }
@@ -331,8 +337,7 @@
     .toc a {
       text-decoration: none; font-size: 12.5px; font-weight: 600; color: var(--text-muted);
       padding: 6px 13px; border-radius: 999px; border: 1px solid var(--edge);
-      background: var(--glass); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
-      box-shadow: inset 0 1px 0 var(--specular); white-space: nowrap;
+      background: var(--glass); box-shadow: inset 0 1px 0 var(--specular); white-space: nowrap;
       transition: color 140ms, border-color 140ms, background 140ms;
     }
     .toc a:hover { color: var(--text); border-color: var(--edge-strong); background: var(--glass-raised); }
@@ -397,8 +402,7 @@
     .pair figcaption {
       position: absolute; left: 10px; top: 10px; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
       padding: 3px 9px; border-radius: 999px; color: var(--text-muted);
-      background: color-mix(in srgb, var(--bg) 55%, transparent); border: 1px solid var(--edge);
-      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+      background: color-mix(in srgb, var(--bg) 78%, transparent); border: 1px solid var(--edge);
     }
     .turn { display: grid; grid-template-columns: repeat(4, 1fr); }
     .turn figure { background: var(--glass-solid); position: relative; }
@@ -917,7 +921,19 @@ xcrun metal --version</pre>
         ctx.globalAlpha = 1;
       }
 
-      function loop(now) { draw(now); requestAnimationFrame(loop); }
+      // Throttled: every dust repaint forces every glass panel on screen to re-blur,
+      // so draw at ~20 fps, only near the top of the page, and never while scrolling or hidden.
+      var FRAME_MS = 50, last = 0, scrolling = false, scrollTimer = 0;
+      window.addEventListener('scroll', function () {
+        scrolling = true; clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function () { scrolling = false; }, 180);
+      }, { passive: true });
+      function loop(now) {
+        requestAnimationFrame(loop);
+        // Below the hero the page is dense with glass, so the dust holds still there.
+        if (scrolling || document.hidden || now - last < FRAME_MS || window.scrollY > H) return;
+        last = now; draw(now);
+      }
 
       resize();
       window.addEventListener('resize', resize);
