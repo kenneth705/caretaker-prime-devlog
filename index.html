@@ -1,0 +1,1007 @@
+<!doctype html>
+<html lang="en">
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  fal SHARE-SITE TEMPLATE — monochrome liquid glass
+  ═══════════════════════════════════════════════════════════════════════════
+  The house style for client-facing share sites (bake-offs, model comparisons,
+  reports, demo galleries). Monochrome palette, Apple-style liquid glass:
+  frosted translucent panels, saturated blur, specular edge highlights,
+  continuous rounded corners, pill controls.
+
+  RULES (do not break these when adapting):
+  • 100% self-contained: opens by double-clicking this file (file://).
+    No web server, no build step, no npm, no CDN, no fetch() of local files.
+  • Inline all CSS/JS. Data lives in an inline <script> as a JS object if needed.
+  • Media (videos/images) referenced by RELATIVE path inside this folder,
+    so the whole folder zips and travels.
+  • Dark mode is the default; keep the light/dark toggle.
+  • Keep the fal logo lock-up in the header.
+  • Stay monochrome: hierarchy comes from opacity, weight, and glass depth —
+    not hue. (Filled white chip = the winner; outline chips = everything else.)
+
+  HOW TO USE:
+  1. Copy this whole folder, rename it for the project.
+  2. Edit the header title/subtitle and the hero (spots marked ✏️).
+  3. Delete the section blocks you don't need (each is marked with
+    ── SECTION: … ──), keep the ones you do, duplicate cards as needed.
+  4. Drop media into ./media/ and point tiles at it.
+  ═══════════════════════════════════════════════════════════════════════════
+-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caretaker Prime · Dev Log</title>
+  <meta name="description" content="How Caretaker Prime, a cel-shaded creature-garden game, is being built in Unreal Engine 5.8 by an orchestrated team of AI agents with assets from fal." />
+  <style>
+    /* ── Design tokens (monochrome; hierarchy via opacity & depth, not hue) ── */
+    :root {
+      /* dark theme (default) */
+      --bg: #08080a;
+      --bg-grad-1: rgba(255, 255, 255, 0.055);  /* soft top light */
+      --bg-grad-2: rgba(255, 255, 255, 0.025);
+      --glass: rgba(255, 255, 255, 0.055);       /* frosted panel fill */
+      --glass-raised: rgba(255, 255, 255, 0.09);
+      --glass-solid: #131316;
+      --text: rgba(255, 255, 255, 0.96);
+      --text-muted: rgba(255, 255, 255, 0.55);
+      --text-faint: rgba(255, 255, 255, 0.34);
+      --edge: rgba(255, 255, 255, 0.12);          /* hairline border */
+      --edge-strong: rgba(255, 255, 255, 0.2);
+      --specular: rgba(255, 255, 255, 0.22);      /* top inner highlight */
+      --specular-soft: rgba(255, 255, 255, 0.07);
+      --ink: #ffffff;                             /* the one "accent": pure mono */
+      --ink-contrast: #0a0a0c;                    /* text on filled ink */
+      --ink-soft: rgba(255, 255, 255, 0.1);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.35);
+      --radius-xl: 1.6rem;    /* hero panels, media cards */
+      --radius-lg: 1.25rem;   /* standard panels */
+      --radius-md: 0.9rem;
+      --blur: blur(32px) saturate(170%);
+    }
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --bg-grad-1: rgba(255, 255, 255, 0.9);
+      --bg-grad-2: rgba(0, 0, 0, 0.03);
+      --glass: rgba(255, 255, 255, 0.58);
+      --glass-raised: rgba(255, 255, 255, 0.82);
+      --glass-solid: #ffffff;
+      --text: rgba(0, 0, 0, 0.92);
+      --text-muted: rgba(0, 0, 0, 0.55);
+      --text-faint: rgba(0, 0, 0, 0.36);
+      --edge: rgba(0, 0, 0, 0.08);
+      --edge-strong: rgba(0, 0, 0, 0.14);
+      --specular: rgba(255, 255, 255, 0.95);
+      --specular-soft: rgba(255, 255, 255, 0.55);
+      --ink: #111114;
+      --ink-contrast: #ffffff;
+      --ink-soft: rgba(0, 0, 0, 0.06);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+      --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ── Base ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      /* Focal (brand) activates when installed; Inter/system fallback */
+      font-family: 'Focal', 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    /* Fixed monochrome ambience: one soft light source, top-left */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(1100px 600px at 18% -12%, var(--bg-grad-1), transparent 62%),
+        radial-gradient(900px 600px at 88% 8%, var(--bg-grad-2), transparent 58%);
+      pointer-events: none;
+    }
+    /* Glitch dust layer (brand guide p.30) — sits between the ambient glow
+       and the content; glass panels blur it, which sells the depth. */
+    #dust {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+    code, kbd, pre, .meta {
+      font-family: 'HAL Timezone Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+    a { color: var(--text); text-decoration: underline; text-decoration-color: var(--text-faint); text-underline-offset: 3px; }
+    a:hover { text-decoration-color: var(--text); }
+    :focus-visible { outline: 2px solid var(--text-muted); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Liquid glass (the core surface primitive) ─────────────────────────
+       Frosted fill + saturated blur + specular top edge + soft drop shadow.
+       .glass-raised = one layer up (menus, winner cards, header pills). */
+    .glass {
+      position: relative;
+      background: var(--glass);
+      border: 1px solid var(--edge);
+      border-radius: var(--radius-lg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      box-shadow:
+        inset 0 1px 0 var(--specular),
+        inset 0 -1px 0 var(--specular-soft),
+        var(--shadow-soft);
+    }
+    .glass-raised {
+      background: var(--glass-raised);
+      border-color: var(--edge-strong);
+      box-shadow:
+        inset 0 1px 0 var(--specular),
+        inset 0 -1px 0 var(--specular-soft),
+        var(--shadow);
+    }
+    /* diagonal sheen across glass, like light catching the pane */
+    .glass::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(115deg, var(--specular-soft) 0%, transparent 32%);
+      pointer-events: none;
+    }
+
+    /* ── Header ── */
+    header.site {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      background: color-mix(in srgb, var(--bg) 62%, transparent);
+      border-bottom: 1px solid var(--edge);
+      box-shadow: inset 0 -1px 0 var(--specular-soft);
+    }
+    header.site .bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+    }
+    .lockup { display: flex; align-items: center; gap: 9px; }
+    .lockup svg { color: var(--text); flex: none; }
+    .lockup .word { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+    .lockup .product { font-size: 14px; font-weight: 500; color: var(--text-muted); line-height: 1; margin-top: 1px; }
+    header.site .spacer { flex: 1; }
+
+    /* theme toggle: glass pill */
+    .theme-toggle {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px;
+      border-radius: 999px;
+      border: 1px solid var(--edge);
+      background: var(--glass);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      box-shadow: inset 0 1px 0 var(--specular);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 140ms, border-color 140ms, background 140ms;
+    }
+    .theme-toggle:hover { color: var(--text); border-color: var(--edge-strong); background: var(--glass-raised); }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    [data-theme="light"] .icon-sun { display: none; }
+    :root:not([data-theme="light"]) .icon-moon { display: none; }
+
+    /* ── Hero ── */
+    .hero { padding: 76px 0 40px; }
+    .hero .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted);
+      background: var(--glass);
+      border: 1px solid var(--edge);
+      border-radius: 999px;
+      padding: 6px 14px;
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      box-shadow: inset 0 1px 0 var(--specular);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(30px, 5vw, 48px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      max-width: 20ch;
+    }
+    .hero h1 .grad {
+      /* monochrome gradient: bright to faded, like etched glass */
+      background: linear-gradient(180deg, var(--text) 30%, var(--text-faint) 130%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p.sub { margin-top: 16px; font-size: 17px; color: var(--text-muted); max-width: 58ch; }
+    .hero .meta-line { margin-top: 20px; font-size: 12.5px; color: var(--text-faint); }
+
+    /* ── Sections ── */
+    section.block { padding: 26px 0; }
+    .section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+    .section-head h2 { font-size: 21px; font-weight: 700; letter-spacing: -0.02em; }
+    .section-head .hint { font-size: 13px; color: var(--text-faint); }
+
+    /* ── Stat tiles ── */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+    .stat { padding: 18px 20px; }
+    .stat .label { font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint); }
+    .stat .value { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-top: 4px; }
+    .stat .delta { font-size: 12.5px; margin-top: 2px; color: var(--text-muted); }
+
+    /* ── Comparison / media grid ── */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+    .card { overflow: hidden; display: flex; flex-direction: column; border-radius: var(--radius-xl); }
+    .card .media {
+      aspect-ratio: 16 / 9;
+      background:
+        radial-gradient(120% 100% at 20% 0%, var(--specular-soft), transparent 55%),
+        var(--glass-solid);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-faint); font-size: 13px;
+      border-bottom: 1px solid var(--edge);
+    }
+    .card .media video, .card .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card .body { padding: 15px 18px 17px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .card .title-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .card h3 { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; }
+    .card p { font-size: 13.5px; color: var(--text-muted); }
+    .card .foot { margin-top: auto; padding-top: 8px; font-size: 12px; color: var(--text-faint); }
+
+    /* ── Chips / badges — monochrome: the winner is FILLED, everything else
+         is outline glass; strength reads through opacity, not color. ── */
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11.5px; font-weight: 600;
+      padding: 4px 11px; border-radius: 999px;
+      border: 1px solid var(--edge-strong);
+      color: var(--text-muted);
+      background: var(--ink-soft);
+      box-shadow: inset 0 1px 0 var(--specular-soft);
+      white-space: nowrap;
+    }
+    .chip.strong { color: var(--text); border-color: var(--edge-strong); }
+    .chip.fill {
+      color: var(--ink-contrast);
+      background: var(--ink);
+      border-color: transparent;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+    .chip.dim { color: var(--text-faint); background: transparent; border-color: var(--edge); box-shadow: none; }
+
+    /* ── Table ── */
+    .table-scroll { overflow-x: auto; }
+    table.data { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    table.data th {
+      text-align: left; font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-faint);
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--edge-strong);
+    }
+    table.data td { padding: 12px 18px; border-bottom: 1px solid var(--edge); }
+    table.data tr:last-child td { border-bottom: none; }
+    table.data td.num, table.data th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* ── Notes / prose panel ── */
+    .prose { padding: 22px 26px; font-size: 14.5px; color: var(--text-muted); }
+    .prose h3 { color: var(--text); font-size: 15px; margin-bottom: 8px; }
+    .prose p + p { margin-top: 10px; }
+    .prose strong { color: var(--text); }
+
+    /* ── Footer ── */
+    footer.site {
+      margin-top: 40px;
+      border-top: 1px solid var(--edge);
+      padding: 26px 0 40px;
+      font-size: 12.5px;
+      color: var(--text-faint);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+  
+    /* ── Caretaker Prime additions (built only from template tokens) ── */
+    /* keep content above the glass sheen so light-theme text isn't washed out */
+    .glass > *:not(.lanes) { position: relative; z-index: 1; }
+    .hero { padding-top: 56px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; align-items: center; }
+    .hero-art { border-radius: var(--radius-xl); overflow: hidden; }
+    .hero-art img { display: block; width: 100%; height: auto; }
+    .hero-art .cap { padding: 10px 16px 12px; font-size: 11.5px; color: var(--text-faint); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* section nav: glass pills, scrolls sideways on phones */
+    .toc { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 8px; }
+    .toc a {
+      text-decoration: none; font-size: 12.5px; font-weight: 600; color: var(--text-muted);
+      padding: 6px 13px; border-radius: 999px; border: 1px solid var(--edge);
+      background: var(--glass); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+      box-shadow: inset 0 1px 0 var(--specular); white-space: nowrap;
+      transition: color 140ms, border-color 140ms, background 140ms;
+    }
+    .toc a:hover { color: var(--text); border-color: var(--edge-strong); background: var(--glass-raised); }
+    section.block { scroll-margin-top: 72px; }
+
+    .cap-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .tile { padding: 16px 18px; }
+    .tile h3 { font-size: 14.5px; font-weight: 650; margin-bottom: 4px; }
+    .tile p { font-size: 13.5px; color: var(--text-muted); }
+    .tile .num { font-size: 11.5px; color: var(--text-faint); margin-bottom: 6px; }
+    .prose ul, .prose ol { padding-left: 20px; }
+    .prose li + li { margin-top: 6px; }
+    .stack { display: flex; flex-direction: column; gap: 18px; }
+
+    /* core loop / pipeline chain of pills */
+    .chain { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .chain .arrow { color: var(--text-faint); font-size: 13px; }
+    .step {
+      display: inline-flex; flex-direction: column; gap: 2px;
+      padding: 9px 15px; border-radius: 999px; border: 1px solid var(--edge-strong);
+      background: var(--ink-soft); box-shadow: inset 0 1px 0 var(--specular-soft);
+      font-size: 13px; font-weight: 600;
+    }
+    .step .meta { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+
+    /* palette swatches (game-art content, not UI colour) */
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+    .sw { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 999px; border: 1px solid var(--edge); background: var(--ink-soft); }
+    .sw i { width: 22px; height: 22px; border-radius: 999px; flex: none; box-shadow: inset 0 0 0 1px var(--edge-strong); }
+    .sw span { font-size: 11.5px; line-height: 1.25; color: var(--text-muted); }
+    .sw span b { display: block; font-weight: 600; color: var(--text); font-size: 11.5px; }
+
+    /* agent diagram */
+    .org { padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .node { padding: 12px 18px; border-radius: var(--radius-lg); text-align: center; min-width: 220px; }
+    .node h3 { font-size: 14.5px; font-weight: 650; }
+    .node p { font-size: 12.5px; color: var(--text-muted); }
+    .wire { width: 1px; height: 22px; background: var(--edge-strong); }
+    .lanes { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; position: relative; padding-top: 22px; }
+    .lanes::before { content: ''; position: absolute; top: 0; left: 12.5%; right: 12.5%; height: 22px; border: 1px solid var(--edge-strong); border-bottom: none; border-radius: 12px 12px 0 0; }
+    .lane { padding: 14px 16px; }
+    .lane h3 { font-size: 14px; font-weight: 650; }
+    .lane .who { font-size: 11.5px; color: var(--text-faint); margin: 2px 0 8px; }
+    .lane ul { list-style: none; font-size: 12.5px; color: var(--text-muted); display: flex; flex-direction: column; gap: 4px; }
+    .lane li::before { content: '· '; color: var(--text-faint); }
+    .tools-row { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+    /* media cards with natural aspect */
+    .card .media { position: relative; overflow: hidden; }
+    .card .media > img { position: absolute; inset: 0; }
+    .card .media.wide > img { position: static; }
+    .card .media.sq { aspect-ratio: 1 / 1; }
+    .card .media.wide { aspect-ratio: auto; }
+    .card .media.wide img { height: auto; object-fit: contain; }
+    .card .media.contain img { object-fit: contain; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--edge); }
+    .pair figure { position: relative; aspect-ratio: 1 / 1; background: var(--glass-solid); }
+    .pair figure + figure { border-left: 1px solid var(--edge); }
+    .pair img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .pair figcaption {
+      position: absolute; left: 10px; top: 10px; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 999px; color: var(--text-muted);
+      background: color-mix(in srgb, var(--bg) 55%, transparent); border: 1px solid var(--edge);
+      backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+    }
+    .turn { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .turn figure { background: var(--glass-solid); position: relative; }
+    .turn figure + figure { border-left: 1px solid var(--edge); }
+    .turn img { width: 100%; display: block; aspect-ratio: 1/1; object-fit: contain; }
+    .turn figcaption { position: absolute; left: 8px; bottom: 6px; font-size: 10.5px; color: var(--text-faint); letter-spacing: 0.06em; text-transform: uppercase; }
+    img.zoom { cursor: zoom-in; }
+    blockquote.quote { font-size: 15px; color: var(--text); border-left: 2px solid var(--edge-strong); padding: 2px 0 2px 14px; margin: 10px 0; }
+
+    /* endpoints + tests */
+    table.data td code, .meta.id { font-size: 12.5px; color: var(--text); }
+    table.data td.desc { color: var(--text-muted); }
+
+    /* devlog timeline */
+    .timeline { position: relative; display: flex; flex-direction: column; gap: 14px; padding-left: 22px; }
+    .timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 1px; background: var(--edge-strong); }
+    .entry { padding: 16px 20px; }
+    .entry::before {
+      content: ''; position: absolute; left: -21px; top: 22px; width: 11px; height: 11px; border-radius: 999px;
+      background: var(--bg); border: 1px solid var(--edge-strong); box-shadow: inset 0 0 0 3px var(--ink-soft);
+    }
+    .entry .when { font-size: 11.5px; color: var(--text-faint); }
+    .entry h3 { font-size: 15px; font-weight: 650; margin: 2px 0 6px; }
+    .entry ul { padding-left: 18px; font-size: 13.5px; color: var(--text-muted); }
+    .entry li + li { margin-top: 4px; }
+
+    /* lightbox */
+    .lightbox { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 24px;
+      background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); cursor: zoom-out; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 100%; max-height: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+
+    @media (max-width: 900px) {
+      .hero-grid, .two { grid-template-columns: 1fr; }
+      .three { grid-template-columns: 1fr 1fr; }
+      .lanes { grid-template-columns: 1fr 1fr; }
+      .lanes::before { left: 25%; right: 25%; }
+    }
+    @media (max-width: 560px) {
+      .wrap { padding: 0 16px; }
+      .hero { padding-top: 36px; }
+      .three, .lanes { grid-template-columns: 1fr; }
+      .lanes::before { display: none; }
+      .lanes { padding-top: 0; }
+      .node { min-width: 0; width: 100%; }
+      .turn { grid-template-columns: 1fr 1fr; }
+      .turn figure:nth-child(3) { border-left: none; }
+      .turn figure:nth-child(n+3) { border-top: 1px solid var(--edge); }
+      .prose { padding: 18px 18px; }
+      table.data th, table.data td { padding: 10px 12px; }
+      .lockup .product { font-size: 13px; }
+      .section-head { flex-direction: column; align-items: flex-start; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Glitch dust background (fal brand guidelines p.30) -->
+  <canvas id="dust" aria-hidden="true"></canvas>
+
+  <!-- ── HEADER: fal lock-up + product name + theme toggle ── -->
+  <header class="site">
+    <div class="wrap bar">
+      <span class="lockup">
+        <!-- fal gear symbol (redrawn from fal brand guidelines) -->
+        <svg width="20" height="20" viewBox="0 0 100 100" fill="currentColor" fill-rule="evenodd" aria-hidden="true">
+          <path d="M40 0 H60 A10 10 0 0 1 70 10 V18 A12 12 0 0 0 82 30 H90 A10 10 0 0 1 100 40 V60 A10 10 0 0 1 90 70 H82 A12 12 0 0 0 70 82 V90 A10 10 0 0 1 60 100 H40 A10 10 0 0 1 30 90 V82 A12 12 0 0 0 18 70 H10 A10 10 0 0 1 0 60 V40 A10 10 0 0 1 10 30 H18 A12 12 0 0 0 30 18 V10 A10 10 0 0 1 40 0 Z M50 25 A25 25 0 1 0 50 75 A25 25 0 1 0 50 25 Z" />
+        </svg>
+        <span class="word">fal</span>
+        <span class="product">Caretaker Prime · dev log</span>
+      </span>
+      <span class="spacer"></span>
+      <button class="theme-toggle" id="themeToggle" title="Toggle light / dark" aria-label="Toggle light / dark theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ── SECTION: hero ── -->
+    <div class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Dev log · <span id="updated">2026</span></span>
+          <h1><span class="grad">Caretaker Prime</span></h1>
+          <p class="sub">
+            A cel-shaded creature garden: raise a few memorable creatures on an overgrown island that keeps living
+            while the game is closed. Think Chao Garden care, Stardew restoration and Animal Crossing coziness.
+          </p>
+          <p class="sub" style="font-size:15px">
+            Built in Unreal Engine 5.8 on a Mac by a team of AI agents directed by one person, with every art and
+            sound asset generated on fal. This page documents how, including what didn't work.
+          </p>
+          <p class="meta-line meta">Work in progress · starter island, first creature · updated as we go</p>
+        </div>
+        <figure class="glass glass-raised hero-art">
+          <img class="zoom" src="media/anchor_d_beach.webp" alt="Cel-shaded concept of a lavender crystal-rabbit adult creature holding a fruit on a beach beside a rope-bound pier" />
+          <figcaption class="cap meta">Style anchor · adult creature on the starter beach · nano-banana-pro</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <nav class="toc" aria-label="Sections">
+      <a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
+      <a href="#pipeline">fal pipeline</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
+      <a href="#sim">Simulation</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
+    </nav>
+
+    <section class="block">
+      <div class="stats" id="stats"></div>
+    </section>
+
+    <!-- ── SECTION: the game ── -->
+    <section class="block" id="game">
+      <div class="section-head"><h2>What the game is</h2><span class="hint">design direction, not a feature list</span></div>
+      <div class="glass prose">
+        <p>
+          You are the newly appointed <strong>Caretaker Prime</strong> of a neglected island sector. The previous
+          caretaker is gone, the facilities are failing and the islands are overgrown. A caretaker from another
+          sector helps over a patchy video link, but doesn't know your islands. A storm hit the sector some time ago,
+          and you piece the rest together as you go.
+        </p>
+        <p>
+          You raise a small number of creatures, around 15 at most on the first real island. Genes, food, care,
+          friendships, rivalries and how you treat them shape who each one becomes. The world runs on the real clock,
+          including while the game is closed, and there is <strong>no game over from neglect</strong>. The goal is one
+          companion with a personal history, not a collection.
+        </p>
+      </div>
+
+      <div class="three" style="margin-top:14px" id="pillars">
+        <div class="glass tile"><div class="num meta">01</div><h3>Oddly alive</h3><p>Creatures approach, choose, remember, teach, misbehave and make up, within rules you can read.</p></div>
+        <div class="glass tile"><div class="num meta">02</div><h3>Agency with consequences</h3><p>Praise, scold, feed, relocate. Context, trust, memory and who was watching change the outcome.</p></div>
+        <div class="glass tile"><div class="num meta">03</div><h3>Time and continuity</h3><p>Real clock and seasons, elderhood, reincarnation, descendants and a family album spanning years.</p></div>
+        <div class="glass tile"><div class="num meta">04</div><h3>Restoration as play</h3><p>Clear grass and rocks, find notes, repair hardware, plant trees, bring abandoned islands back.</p></div>
+        <div class="glass tile"><div class="num meta">05</div><h3>A clean world view</h3><p>Little HUD. Faces, behaviour and small emotion symbols carry the state; a phone holds the detail.</p></div>
+        <div class="glass tile"><div class="num meta">06</div><h3>Systems first</h3><p>The simulation is deterministic and saveable. AI helps make assets; it never decides what a creature does.</p></div>
+      </div>
+
+      <div class="glass prose" style="margin-top:14px">
+        <h3>The return loop</h3>
+        <div class="chain" style="margin-top:6px">
+          <span class="step">Recap of what happened</span><span class="arrow">→</span>
+          <span class="step">Walk the garden</span><span class="arrow">→</span>
+          <span class="step">Notice needs</span><span class="arrow">→</span>
+          <span class="step">Feed and care</span><span class="arrow">→</span>
+          <span class="step">Harvest or plant</span><span class="arrow">→</span>
+          <span class="step">Train, play, restore</span><span class="arrow">→</span>
+          <span class="step">Leave it running</span>
+        </div>
+        <p style="margin-top:12px">
+          The first milestone we test against: <strong>after about a week of real time, do two creatures from
+          staggered eggs feel different and produce stories you remember?</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- ── SECTION: art direction ── -->
+    <section class="block" id="art">
+      <div class="section-head"><h2>Art direction</h2><span class="hint">cozy anime cel-shading, from an 8-page style guide</span></div>
+      <div class="two">
+        <div class="glass prose">
+          <h3>Rules every render is checked against</h3>
+          <ol>
+            <li><strong>Coloured contours.</strong> Lines are a darker shade of the fill they surround, never pure black.</li>
+            <li><strong>Flat fills, hard shadows.</strong> A base colour plus two or three hard-edged shadow steps. No gradients inside fills.</li>
+            <li><strong>Sunny light.</strong> Coastal sun from the upper left, a faint warm rim light, faces always lit.</li>
+            <li><strong>Hue-shifted shadows.</strong> Shadows go cooler and violet, not just darker grey.</li>
+            <li><strong>Chunky shapes.</strong> Rounded, readable silhouettes at gameplay distance. No spindly parts on babies.</li>
+            <li><strong>No texture noise.</strong> No fur strands, grain or bump noise. Fur is implied by silhouette tufts.</li>
+            <li><strong>One body plan.</strong> Every creature shares a biped rig: head, torso, two arms with usable hands, two legs.</li>
+          </ol>
+        </div>
+        <div class="glass prose">
+          <h3>Palette</h3>
+          <p style="margin-bottom:12px">Sampled from the style guide. These are the game's colours; this page stays monochrome so the art carries them.</p>
+          <div class="swatches" id="swatches"></div>
+        </div>
+      </div>
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Style anchors</h2><span class="hint">test renders that prove the look reproduces before any real asset is made</span></div>
+      <div class="grid">
+        <div class="glass card"><div class="media"><img class="zoom" src="media/anchor_nursery_cave.webp" alt="Nursery cave concept with a locked stone door and the incubator" /></div>
+          <div class="body"><h3>Nursery cave</h3><p>Cave, locked vault door and incubator in one frame.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" src="media/anchor_prop_sheet.webp" alt="Prop sheet concept" /></div>
+          <div class="body"><h3>Prop sheet</h3><p>Rope, timber, faceted stone and rusty-cute company hardware.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" src="media/anchor_ground_tile.webp" alt="Tileable ground texture test" /></div>
+          <div class="body"><h3>Ground tile</h3><p>Seam error at the wrap edges came out close to the interior baseline, so it tiles.</p></div></div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: how we build it ── -->
+    <section class="block" id="team">
+      <div class="section-head"><h2>How we build it</h2><span class="hint">one person, one orchestrator, many agents</span></div>
+      <div class="glass org">
+        <div class="glass glass-raised node"><h3>Kenneth</h3><p>Direction, taste, and every approval gate</p></div>
+        <div class="wire"></div>
+        <div class="glass glass-raised node"><h3>Orchestrator · Claude Opus 5.5</h3><p>Plans, dispatches, then re-runs every acceptance check itself</p></div>
+        <div class="wire"></div>
+        <div class="lanes">
+          <div class="glass lane"><h3>Planning &amp; art direction</h3><div class="who meta">Fable / Opus subagents</div>
+            <ul><li>Plan and architecture</li><li>Art bible and prompt blocks</li><li>Concepts, picks with written reasons</li></ul></div>
+          <div class="glass lane"><h3>Engine code</h3><div class="who meta">Codex</div>
+            <ul><li>C++20 simulation core</li><li>Save schema and migrations</li><li>CMake + ctest loop</li></ul></div>
+          <div class="glass lane"><h3>3D pipeline</h3><div class="who meta">Opus / Sonnet subagents</div>
+            <ul><li>fal generation scripts</li><li>Headless Blender checks and fixes</li><li>FBX export for Unreal</li></ul></div>
+          <div class="glass lane"><h3>Mechanical work</h3><div class="who meta">Sonnet subagents</div>
+            <ul><li>Repo bootstrap, git LFS</li><li>Commits and pushes</li><li>Engine install checks</li></ul></div>
+        </div>
+        <div class="tools-row">
+          <span class="chip">fal: art, 3D, textures, sound</span><span class="chip">Blender (headless)</span>
+          <span class="chip">Unreal Engine 5.8</span><span class="chip">git + LFS, private repo</span>
+        </div>
+      </div>
+      <div class="two" style="margin-top:14px">
+        <div class="glass prose">
+          <h3>Systems first, AI for assets only</h3>
+          <p>Creature behaviour, needs, time and saves are ordinary deterministic C++ with tests. <strong>No model
+          call decides game state</strong>, and the game never needs a network call to run. fal generates the art,
+          meshes, textures and sounds during development; those become normal files in the project.</p>
+        </div>
+        <div class="glass prose">
+          <h3>Humans at the gates</h3>
+          <p>Agents propose and check; Kenneth decides. The creature design was a hard stop: nothing went to 3D until
+          he picked one. Every generated asset carries a manifest with the endpoint, prompt, references, file hashes,
+          and an <span class="meta">approved</span> flag that only flips on his explicit decision, stored with his words.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: fal pipeline ── -->
+    <section class="block" id="pipeline">
+      <div class="section-head"><h2>The fal asset pipeline</h2><span class="hint">every endpoint checked live before use</span></div>
+      <div class="glass prose">
+        <h3>Creatures</h3>
+        <div class="chain" style="margin:8px 0 16px">
+          <span class="step">Concept<span class="meta">nano-banana-pro/edit</span></span><span class="arrow">→</span>
+          <span class="step">Turnaround<span class="meta">4 views, A-pose</span></span><span class="arrow">→</span>
+          <span class="step">Multi-image to 3D<span class="meta">Meshy 7.1</span></span><span class="arrow">→</span>
+          <span class="step">Rig + animations<span class="meta">Meshy multi-animation</span></span><span class="arrow">→</span>
+          <span class="step">Blender check<span class="meta">bones, clips, holes</span></span><span class="arrow">→</span>
+          <span class="step">Unreal<span class="meta">FBX import</span></span>
+        </div>
+        <h3>Props</h3>
+        <div class="chain" style="margin:8px 0 16px">
+          <span class="step">2 concepts<span class="meta">nano-banana-pro/edit</span></span><span class="arrow">→</span>
+          <span class="step">Agent picks one<span class="meta">reason recorded</span></span><span class="arrow">→</span>
+          <span class="step">Image to 3D<span class="meta">Meshy 7.1</span></span><span class="arrow">→</span>
+          <span class="step">Blender check<span class="meta">tris, bounds, scale</span></span>
+        </div>
+        <h3>Textures and sound</h3>
+        <div class="chain" style="margin:8px 0 4px">
+          <span class="step">Tiling albedo<span class="meta">ideogram / z-image tiling</span></span><span class="arrow">→</span>
+          <span class="step">2x2 seam check</span><span class="arrow">→</span>
+          <span class="step">Normal map<span class="meta">patina</span></span>
+          <span class="arrow" style="margin:0 6px">·</span>
+          <span class="step">SFX<span class="meta">ElevenLabs SFX v2</span></span>
+          <span class="step">Ambience<span class="meta">Mirelo SFX 1.6</span></span>
+        </div>
+      </div>
+      <div class="two" style="margin-top:14px">
+        <div class="glass table-scroll">
+          <table class="data">
+            <thead><tr><th>Job</th><th>fal endpoint</th></tr></thead>
+            <tbody>
+              <tr><td>Concepts, turnarounds</td><td><code>fal-ai/nano-banana-pro/edit</code></td></tr>
+              <tr><td>Creature mesh</td><td><code>fal-ai/meshy/v7.1/multi-image-to-3d</code></td></tr>
+              <tr><td>Rig + animation set</td><td><code>fal-ai/meshy/rigging/multi-animation</code></td></tr>
+              <tr><td>Prop meshes</td><td><code>meshy/v7.1/image-to-3d</code></td></tr>
+              <tr><td>Tiling albedo (default)</td><td><code>ideogram/v4/tiling</code></td></tr>
+              <tr><td>Tiling albedo (rock)</td><td><code>fal-ai/z-image/turbo/tiling</code></td></tr>
+              <tr><td>Normal maps</td><td><code>fal-ai/patina</code></td></tr>
+              <tr><td>Sound effects</td><td><code>fal-ai/elevenlabs/sound-effects/v2</code></td></tr>
+              <tr><td>Ambience loop</td><td><code>mirelo-ai/sfx1.6/text-to-audio</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="glass card">
+          <div class="media sq"><img class="zoom" src="media/texture_rock_2x2.webp" alt="Faceted violet-gray rock texture tiled 2 by 2" /></div>
+          <div class="body">
+            <div class="title-row"><h3>Rock ground, tiled 2x2</h3><span class="chip dim">1 of 4 done</span></div>
+            <p>Tiling the texture 2x2 makes seams obvious. This one passed. Grass, sand and dirt path are next.</p>
+          </div>
+        </div>
+      </div>
+      <div class="glass prose" style="margin-top:14px">
+        <h3>Starter sound set</h3>
+        <p>Footsteps on grass, grass pull, pickup whoosh, fruit crunch, egg crack, hatch chime, happy chirp, hungry
+        whine, phone ping, and a looping island ambience. Every sound has a manifest like the images do.</p>
+      </div>
+    </section>
+
+    <!-- ── SECTION: the creature ── -->
+    <section class="block" id="creature">
+      <div class="section-head"><h2>The creature</h2><span class="hint">one neutral baby that every lineage grows from</span></div>
+      <div class="glass prose" style="margin-bottom:14px">
+        <p>The first baby has to be <strong>archetype-neutral</strong>: tan and cream, no leaves, fins, feathers or
+        crystals. What it grows into comes from genes and care. The art agent drew four candidates, each with a hero
+        render and a turnaround for 3D. Then the build paused for a human pick.</p>
+        <blockquote class="quote">“for creatures let go with C”<span class="meta" style="display:block;font-size:12px;color:var(--text-faint);margin-top:4px">Kenneth, 2026-09-27</span></blockquote>
+      </div>
+      <div class="grid" id="babies" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
+
+      <div class="glass card" style="margin-top:18px">
+        <div class="turn">
+          <figure><img class="zoom" src="media/dumpling_turn_front.webp" alt="Dumpling front view" /><figcaption>front</figcaption></figure>
+          <figure><img class="zoom" src="media/dumpling_turn_three_quarter.webp" alt="Dumpling three-quarter view" /><figcaption>three-quarter</figcaption></figure>
+          <figure><img class="zoom" src="media/dumpling_turn_side.webp" alt="Dumpling side view" /><figcaption>side</figcaption></figure>
+          <figure><img class="zoom" src="media/dumpling_turn_back.webp" alt="Dumpling back view" /><figcaption>back</figcaption></figure>
+        </div>
+        <div class="body"><h3>Dumpling turnaround</h3><p>The four A-pose views fed to Meshy's multi-image-to-3D. Consistency across views matters more than any single drawing.</p></div>
+      </div>
+
+      <div class="glass card" style="margin-top:18px">
+        <div class="media wide"><img class="zoom" src="media/dumpling_3d_v1_review.webp" alt="Dumpling 3D v1 review sheet: concept beside 3D front, side, back and walk frames" /></div>
+        <div class="body">
+          <div class="title-row"><h3>3D v1: Meshy 7.1, 24-bone rig, 12 clips</h3><span class="chip dim">not approved</span></div>
+          <p>Concept on the left, the rigged mesh and walk-cycle frames on the right. The shape came through well. The
+          colour reads browner and greyer than the concept because Meshy bakes shading into the texture.</p>
+        </div>
+      </div>
+
+      <div class="glass prose" style="margin-top:14px">
+        <h3>An honest note on v1</h3>
+        <p>The v1 skin weights from the auto-rig deformed badly. Kenneth's review: the head deformed as it turned and
+        the arms warped the body. Measuring it confirmed him: head and neck influence was spread across the face, arm
+        bones pulled on the belly, and several joints sat outside the mesh (one knee was above the hip). An earlier
+        A-pose attempt was worse, which is why v1 already used a T-pose regeneration.</p>
+        <p><strong>v2 is in progress</strong>: a scripted re-skin with a rigid head and narrow blend bands at the neck,
+        armpits and hips, joint pivots moved back inside the body (bone orientations unchanged, so the same animation
+        clips still apply), a fix for a stray scale key in the idle clip, and a colour-corrected texture. It hasn't been
+        reviewed yet.</p>
+      </div>
+      <div class="glass card" style="margin-top:14px">
+        <div class="media wide"><img class="zoom" src="media/dumpling_v2_weights_wave_walk.webp" alt="Skin weights comparison on the wave and walk clips: v1 on the left, v2 on the right" /></div>
+        <div class="body"><div class="title-row"><h3>Weights: v1 (left) vs v2 (right)</h3><span class="chip">in progress</span></div>
+          <p>Same skeleton, same clips. Watch the head and belly in the wave frames. <a href="media/dumpling_v2_weights_compare.webp" class="zoomlink">Full sheet with all four clips</a>.</p></div>
+      </div>
+      <div class="glass card" style="margin-top:14px">
+        <div class="media wide"><img class="zoom" src="media/dumpling_v2_texture_compare.webp" alt="Texture comparison: concept, v1 texture, v2 texture" /></div>
+        <div class="body"><div class="title-row"><h3>Texture: concept, v1, v2</h3><span class="chip">in progress</span></div><p>v2 pulls the tan and cream back toward the concept and flattens the baked shading, so the toon shader can do the shading.</p></div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: prop kit ── -->
+    <section class="block" id="props">
+      <div class="section-head"><h2>Prop kit</h2><span class="hint">concept vs Meshy 3D render, 13 props</span></div>
+      <div class="grid" id="propgrid"></div>
+    </section>
+
+    <!-- ── SECTION: simulation ── -->
+    <section class="block" id="sim">
+      <div class="section-head"><h2>Simulation core</h2><span class="hint">CaretakerSim · C++20 · no engine headers</span></div>
+      <div class="two">
+        <div class="glass prose">
+          <h3>Deterministic</h3>
+          <p>All state is integers: needs and stats in fixed-point hundredths, times in Unix seconds. <strong>No
+          floating-point values are saved.</strong> Randomness is a hash of world seed, subsystem, entity, tick and draw
+          number, so one creature's luck can't shift another's, and a replay with the same seed gives the same bytes.</p>
+        </div>
+        <div class="glass prose">
+          <h3>Offline catch-up</h3>
+          <p>The world ticks every 60 seconds. When you come back, the first 24 hours away are replayed minute by minute;
+          after that it steps hourly, with harm damped the longer you were gone. Catch-up is capped at 60 days. Moving the
+          clock backwards changes nothing. Vacation mode slows ageing and holds needs above a floor.</p>
+        </div>
+      </div>
+      <div class="glass table-scroll" style="margin-top:14px">
+        <table class="data">
+          <thead><tr><th>Test</th><th>What it proves</th></tr></thead>
+          <tbody id="tests"></tbody>
+        </table>
+      </div>
+      <p class="meta" style="font-size:12px;color:var(--text-faint);margin-top:10px">ctest · 17 of 17 passing · full run under a second. Unreal integration is next; the core has not been wired into the engine yet.</p>
+    </section>
+
+    <!-- ── SECTION: engine lessons ── -->
+    <section class="block" id="engine">
+      <div class="section-head"><h2>Engine setup lessons</h2><span class="hint">UE 5.8 on a Mac, things that cost us time</span></div>
+      <div class="stack">
+        <div class="glass prose">
+          <h3>1 · The Epic launcher's App Translocation loop</h3>
+          <p>macOS runs quarantined apps from a randomized, read-only location (App Translocation). The launcher tried
+          to update itself there, couldn't, and restarted into the same update. Clearing the quarantine attribute let it run from
+          <span class="meta">/Applications</span> and finish updating.</p>
+          <pre class="meta" style="margin-top:10px;font-size:12.5px;white-space:pre-wrap">xattr -dr com.apple.quarantine "/Applications/Epic Games Launcher.app"</pre>
+        </div>
+        <div class="glass prose">
+          <h3>2 · Xcode 26+ ships without the Metal compiler</h3>
+          <p>Since Xcode 26 the Metal toolchain is a separate download. Without it, shader compiles fail with
+          <span class="meta">cannot execute tool 'metal' due to missing Metal Toolchain</span>. One-time fix per machine:</p>
+          <pre class="meta" style="margin-top:10px;font-size:12.5px;white-space:pre-wrap">xcodebuild -downloadComponent MetalToolchain
+xcrun metal --version</pre>
+        </div>
+        <div class="glass prose">
+          <h3>3 · UE 5.8 has an MCP plugin</h3>
+          <p>Unreal 5.8 includes Epic's experimental <span class="meta">ModelContextProtocol</span> plugin, which lets
+          agents talk to the editor. It's enabled in the project (editor only), next to the Python scripting plugin. For
+          now the agents drive the editor with headless Python; MCP is not on the critical path yet. This UE version's
+          SDK config also accepts Xcode 27, so C++ builds work on a current toolchain.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: dev log ── -->
+    <section class="block" id="log">
+      <div class="section-head"><h2>Dev log</h2><span class="hint">newest first</span></div>
+      <div class="timeline" id="devlog"></div>
+    </section>
+
+    <!-- ── SECTION: next ── -->
+    <section class="block" id="next">
+      <div class="section-head"><h2>What's next</h2><span class="hint">target: a playable cel-shaded starter island</span></div>
+      <div class="glass prose"><ol id="nextlist"></ol></div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site">
+    <div class="wrap">
+      <div>Caretaker Prime is a work in progress by Kenneth, built with an AI agent team. Art, 3D and sound generated on fal · <span class="meta">fal.ai</span></div>
+      <div>Every image on this page was produced during the build. Updated as the project moves.</div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Glitch dust (fal brand guidelines, "Visual Elements → Glitch Dust") ──
+    // Rules from the guide, kept here so edits don't drift off-brand:
+    //  • a mix of squares, ALL the same size, aligned to a pixel grid, never rotated
+    //  • mostly one primary color + a few nodes of a secondary color
+    //  • main cluster top-right, spreading down/out; sparse — it "finishes off"
+    //    a composition, it never competes with content
+    //  • it's reminiscent of "rendering" / a work in progress — hence the slow
+    //    dissolve-and-respawn animation (static under prefers-reduced-motion)
+    (function () {
+      var canvas = document.getElementById('dust');
+      if (!canvas || !canvas.getContext) return;
+      var ctx = canvas.getContext('2d');
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var CELL = 9;            // one node = one grid cell (same size everywhere)
+      var nodes = [];
+      var dpr = 1, W = 0, H = 0;
+
+      function isLight() { return document.documentElement.getAttribute('data-theme') === 'light'; }
+      function rnd(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+
+      function makeNode(x, y, now) {
+        return {
+          x: x, y: y,
+          secondary: Math.random() < 0.06,   // "a few nodes of a secondary color"
+          t0: now - Math.random() * 9000,
+          life: 7000 + Math.random() * 11000
+        };
+      }
+
+      // Main cluster top-right, working down and spreading out (per the guide).
+      // Each cluster is a clumpy random walk on the grid: mostly adjacent steps
+      // (2×2-ish clumps emerge), occasional jump (isolated specks).
+      function seed() {
+        nodes = [];
+        var now = performance.now();
+        var cols = Math.floor(W / CELL), rows = Math.floor(H / CELL);
+        var clusters = [
+          { x: 0.87, y: 0.08, n: 24 },   // main cluster
+          { x: 0.70, y: 0.26, n: 9 },
+          { x: 0.94, y: 0.44, n: 11 },
+          { x: 0.42, y: 0.14, n: 6 },
+          { x: 0.15, y: 0.52, n: 8 },
+          { x: 0.56, y: 0.70, n: 9 },
+          { x: 0.07, y: 0.88, n: 7 },
+          { x: 0.80, y: 0.90, n: 10 }
+        ];
+        clusters.forEach(function (c) {
+          var cx = Math.round(cols * c.x), cy = Math.round(rows * c.y);
+          var x = cx, y = cy;
+          for (var i = 0; i < c.n; i++) {
+            if (Math.random() < 0.18) { x = cx + rnd(-9, 9); y = cy + rnd(-5, 6); }
+            else { x += rnd(-1, 1); y += rnd(-1, 1); }
+            nodes.push(makeNode(x, y, now));
+          }
+        });
+      }
+
+      function resize() {
+        dpr = window.devicePixelRatio || 1;
+        W = window.innerWidth; H = window.innerHeight;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        seed();
+        if (reduced) draw(performance.now());
+      }
+
+      function draw(now) {
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+        var light = isLight();
+        ctx.fillStyle = light ? '#000000' : '#ffffff';
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i];
+          var t = (now - n.t0) / n.life;
+          if (t >= 1) {
+            // respawn drifting slightly down/out — the "rendering" feel
+            var nn = makeNode(n.x + rnd(-3, 3), n.y + rnd(-2, 3), now);
+            nn.t0 = now;
+            nodes[i] = nn; n = nn; t = 0;
+          }
+          var a = t < 0.15 ? t / 0.15 : t > 0.82 ? (1 - t) / 0.18 : 1;
+          var base = n.secondary ? (light ? 0.42 : 0.5) : (light ? 0.12 : 0.14);
+          ctx.globalAlpha = Math.max(0, a) * base;
+          ctx.fillRect(n.x * CELL, n.y * CELL, CELL, CELL);
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      function loop(now) { draw(now); requestAnimationFrame(loop); }
+
+      resize();
+      window.addEventListener('resize', resize);
+      if (!reduced) requestAnimationFrame(loop);
+      // repaint on theme change even when static
+      new MutationObserver(function () { if (reduced) draw(performance.now()); })
+        .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    })();
+
+    // Theme toggle: dark is the default; choice persists per-browser.
+    // (localStorage can throw on some file:// setups — always try/catch.)
+    (function () {
+      var root = document.documentElement;
+      var KEY = 'fal-site-theme';
+      try {
+        if (localStorage.getItem(KEY) === 'light') root.setAttribute('data-theme', 'light');
+      } catch (e) { /* no storage — stay dark */ }
+      document.getElementById('themeToggle').addEventListener('click', function () {
+        var light = root.getAttribute('data-theme') === 'light';
+        if (light) root.removeAttribute('data-theme');
+        else root.setAttribute('data-theme', 'light');
+        try { localStorage.setItem(KEY, light ? 'dark' : 'light'); } catch (e) {}
+      });
+    })();
+  </script>
+  <script src="data.js"></script>
+  <script>
+    // Renders the updatable parts of the page from data.js (window.SITE).
+    (function () {
+      var S = window.SITE || {};
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function $(id) { return document.getElementById(id); }
+      if (S.updated) $('updated').textContent = 'updated ' + S.updated;
+
+      $('stats').innerHTML = (S.stats || []).map(function (s) {
+        return '<div class="glass stat"><div class="label">' + esc(s.label) + '</div><div class="value">' + esc(s.value) +
+          '</div><div class="delta">' + esc(s.delta) + '</div></div>';
+      }).join('');
+
+      $('swatches').innerHTML = (S.palette || []).map(function (p) {
+        return '<div class="sw"><i style="background:' + esc(p[1]) + '"></i><span><b>' + esc(p[0]) + '</b><span class="meta">' + esc(p[1]) + '</span></span></div>';
+      }).join('');
+
+      $('babies').innerHTML = (S.babies || []).map(function (b) {
+        return '<div class="glass ' + (b.pick ? 'glass-raised ' : '') + 'card"><div class="media sq"><img class="zoom" src="' + esc(b.img) +
+          '" alt="Baby candidate ' + esc(b.id) + ', ' + esc(b.name) + '" /></div><div class="body"><div class="title-row"><h3>' +
+          esc(b.id) + ' · ' + esc(b.name) + '</h3>' + (b.pick ? '<span class="chip fill">Kenneth’s pick</span>' : '<span class="chip dim">candidate</span>') +
+          '</div><p>' + esc(b.text) + '</p></div></div>';
+      }).join('');
+
+      $('propgrid').innerHTML = (S.props || []).map(function (p) {
+        return '<div class="glass card"><div class="pair">' +
+          '<figure><img class="zoom" loading="lazy" src="media/prop_' + esc(p.key) + '_concept.webp" alt="' + esc(p.name) + ' concept" /><figcaption>concept</figcaption></figure>' +
+          '<figure><img class="zoom" loading="lazy" src="media/prop_' + esc(p.key) + '_3d.webp" alt="' + esc(p.name) + ' 3D render" /><figcaption>3D · Meshy 7.1</figcaption></figure>' +
+          '</div><div class="body"><h3>' + esc(p.name) + '</h3><p>' + esc(p.why) + '</p><div class="foot meta">' +
+          esc(p.scale) + ' m · ' + Number(p.tris).toLocaleString('en-US') + ' tris</div></div></div>';
+      }).join('');
+
+      $('tests').innerHTML = (S.tests || []).map(function (t) {
+        return '<tr><td><code>' + esc(t[0]) + '</code></td><td class="desc">' + esc(t[1]) + '</td></tr>';
+      }).join('');
+
+      $('devlog').innerHTML = (S.devlog || []).map(function (e) {
+        return '<article class="glass entry"><div class="when meta">' + esc(e.date) + (e.time ? ' · ' + esc(e.time) : '') +
+          '</div><h3>' + esc(e.title) + '</h3><ul>' + (e.items || []).map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul></article>';
+      }).join('');
+
+      $('nextlist').innerHTML = (S.next || []).map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('');
+
+      // Click any image to view it large.
+      var lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<img alt="" />';
+      document.body.appendChild(lb);
+      document.addEventListener('click', function (ev) {
+        var t = ev.target;
+        if (t && t.tagName === 'A' && t.classList.contains('zoomlink')) {
+          ev.preventDefault(); lb.firstChild.src = t.href; lb.firstChild.alt = t.textContent; lb.classList.add('open');
+        } else if (t && t.tagName === 'IMG' && t.classList.contains('zoom')) {
+          lb.firstChild.src = t.src; lb.firstChild.alt = t.alt; lb.classList.add('open');
+        } else if (lb.classList.contains('open')) { lb.classList.remove('open'); }
+      });
+      document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') lb.classList.remove('open'); });
+    })();
+  </script>
+</body>
+</html>
