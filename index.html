@@ -876,8 +876,8 @@ xcrun metal --version</pre>
         <div class="glass prose">
           <h3>3 · UE 5.8 has an MCP plugin</h3>
           <p>Unreal 5.8 includes Epic's experimental <span class="meta">ModelContextProtocol</span> plugin, which lets
-          agents talk to the editor. It's enabled in the project (editor only), next to the Python scripting plugin. For
-          now the agents drive the editor with headless Python; MCP is not on the critical path yet. This UE version's
+          agents talk to the editor. It's enabled in the project (editor only), next to the Python scripting plugin, and we
+          verified it answers (HTTP on port 8000 by default). Most editor automation still runs as headless Python. This UE version's
           SDK config also accepts Xcode 27, so C++ builds work on a current toolchain.</p>
         </div>
         <div class="glass prose">

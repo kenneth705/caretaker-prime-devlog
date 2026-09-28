@@ -16,7 +16,7 @@ window.SITE = {
   /* Dev log: newest first. Copy an entry, change the date/title/items. */
   devlog: [
     {
-      date: "2026-09-28", time: "10:30",
+      date: "2026-09-28", time: "",
       title: "First playtest: what Kenneth flagged",
       items: [
         "Kenneth played the greybox and liked the look. He flagged four things, all in progress:",
