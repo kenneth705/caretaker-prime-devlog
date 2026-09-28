@@ -2,21 +2,78 @@
    To update the site, edit this file (and add images to media/), then publish.
    Keep everything a plain JS object (no fetch, works from file://). See UPDATING.md. */
 window.SITE = {
-  updated: "2026-09-27",
+  updated: "2026-09-28",
 
   /* Headline numbers in the stat row. */
   stats: [
-    { label: "Sim tests", value: "17 / 17", delta: "passing, standalone C++20" },
-    { label: "Baby candidates", value: "4", delta: "Kenneth picked C" },
+    { label: "Tests", value: "17 + 11", delta: "sim ctest + UE automation, all passing" },
     { label: "Props", value: "13", delta: "concept + 3D mesh each" },
-    { label: "Creature clips", value: "12", delta: "on a 24-bone rig (v1)" },
-    { label: "SFX", value: "10", delta: "starter sound set" }
+    { label: "Creature clips", value: "12", delta: "on a 24-bone rig (v2)" },
+    { label: "Ground textures", value: "5", delta: "tiling albedo + normals" },
+    { label: "SFX files", value: "15", delta: "10 sounds, some with variants" }
   ],
 
   /* Dev log: newest first. Copy an entry, change the date/title/items. */
   devlog: [
     {
-      date: "2026-09-27", time: "evening",
+      date: "2026-09-28", time: "10:30",
+      title: "First playtest: what Kenneth flagged",
+      items: [
+        "Kenneth played the greybox and liked the look. He flagged four things, all in progress:",
+        "The fruit tree is one-sided: it was built from a single image, so it's being rebuilt from multiple views.",
+        "Scale is off: the logs and the caretaker are too big, the incubator and the nursery door too small.",
+        "The cliffs are stacked cubes and read too square. A new fal rock kit is being generated."
+      ]
+    },
+    {
+      date: "2026-09-28", time: "10:17",
+      title: "Playable greybox starter island",
+      items: [
+        "You can walk the island, pick fruit, hand-feed and pet the baby. The creature's behaviour comes from the sim: it reads the sim's intent (wander, seek food, sleep, approach you) and acts it out on the navmesh, with small emotion symbols overhead.",
+        "11 Unreal automation tests (5 sim-in-engine, 6 gameplay) pass alongside the 17 sim tests.",
+        "All five ground textures are done: grass, grass with weeds, sand, dirt path and rock. Ideogram tiling kept stalling, so every one came from z-image turbo tiling, with patina normal maps."
+      ]
+    },
+    {
+      date: "2026-09-28", time: "09:04",
+      title: "The 1 cm creature",
+      items: [
+        "With any animation applied, the baby rendered about 1 cm tall. The animation files carried their metre-to-centimetre scale differently from the mesh, so the whole body was scaled by 1/100. Importing the animations at x100 on the root bone fixed it, and the import script now fails loudly if the root scale ever disagrees again.",
+        "Also added the template content packs that the project copy had missed (Characters, Input, LevelPrototyping)."
+      ]
+    },
+    {
+      date: "2026-09-28", time: "08:16",
+      title: "Global cel-shading look",
+      items: [
+        "One post-process material gives the whole game its look: three tone bands, coloured outlines, a warm rim light on characters, and a painted sky. Lumen, bloom and ambient occlusion are off so the bands stay predictable.",
+        "Kenneth's verdict after playing: \u201clike the cell shading\u201d."
+      ]
+    },
+    {
+      date: "2026-09-28", time: "07:55",
+      title: "The simulation runs inside Unreal",
+      items: [
+        "A world subsystem owns the sim: it loads the save (with a backup), catches up on the time you were away, keeps a \u201cWhile you were away\u201d recap, steps every 60 real seconds and autosaves.",
+        "Debug console commands let us advance time, feed, hatch and dump every creature's state."
+      ]
+    },
+    {
+      date: "2026-09-28", time: "07:30",
+      title: "Fixed this page's flicker",
+      items: [
+        "Kenneth: \u201cthat site flickers hella bad\u201d. The animated background was forcing about 60 blurred glass panels to re-blur every frame. It now redraws less often, pauses while scrolling, and glass inside glass no longer blurs."
+      ]
+    },
+    {
+      date: "2026-09-27", time: "22:13",
+      title: "Everything imported into Unreal",
+      items: [
+        "One idempotent import script brings in the 13 props (each scaled to its real-world size), the creature and its 12 clips, the textures and the sounds, and builds a review map."
+      ]
+    },
+    {
+      date: "2026-09-27", time: "20:05",
       title: "Public dev log goes up",
       items: [
         "This page. Built from the fal share-site template, published to GitHub Pages from a separate public repo; the game repo stays private.",
@@ -25,11 +82,11 @@ window.SITE = {
     },
     {
       date: "2026-09-27", time: "19:45",
-      title: "Dumpling v1 animations reviewed: weights need a redo",
+      title: "Dumpling v1 rejected: weights redone as v2",
       items: [
         "Kenneth reviewed the v1 clips in Blender and flagged the skin weights: the head deformed as it turned and the arms warped the body.",
         "Measured cause: Meshy's auto-weights spread head/neck influence across the face and let arm bones pull on the belly; several joints sat outside the mesh (one knee above the hip).",
-        "v2 in progress: a scripted re-skin (rigid head, narrow blend bands at neck, armpits and hips), joint pivots re-seated inside the mesh, a Hips scale bug in the idle clip fixed, and a colour-corrected base texture. Not yet reviewed."
+        "v2 (done 19:46): joints re-placed inside the body and the mesh re-skinned by region, with a rigid head and narrow blend bands at the neck, armpits and hips. Measured head distortion went from up to 270 mm to 0, and belly leak on the wave clip from 33 mm to 0. The texture was colour-matched to the concept."
       ]
     },
     {
@@ -166,11 +223,19 @@ window.SITE = {
 
   /* What's next (short, plain). */
   next: [
-    "Finish Dumpling v2 (re-skin, re-seated joints, corrected texture) and get Kenneth's review.",
-    "Remaining ground textures: grass, sand and dirt path.",
-    "Toon post-process in Unreal: 2 to 3 hard lighting bands, warm rim light, outlines coloured from the base colour instead of black.",
-    "Connect the sim to Unreal: a world subsystem, save/load, offline catch-up with a recap, and debug commands.",
-    "Greybox the starter island and place the prop kit.",
-    "First loop: egg, hatch, hungry baby, hand-feed, quit, relaunch, recap."
+    "Fix the scale issues from the playtest: logs, caretaker, incubator and nursery door.",
+    "Replace the square cube cliffs with a new fal rock kit.",
+    "Rebuild the fruit tree from multiple views so it reads from every side.",
+    "An on-screen \u201cWhile you were away\u201d recap (today it goes to the log).",
+    "Custom animation clips for the round body: the generic clips hide the wave, crease the belly and dip the feet.",
+    "The second creature: an egg that washes ashore, and two babies that grow apart."
+  ],
+
+  /* First-playtest notes (Kenneth's flags). status: "in progress" | "done". */
+  playtest: [
+    { what: "Fruit tree is one-sided", fix: "Rebuilding it from a multi-view turnaround", status: "in progress" },
+    { what: "Logs and caretaker too big", fix: "Being rescaled", status: "in progress" },
+    { what: "Incubator and nursery door too small", fix: "Being rescaled", status: "in progress" },
+    { what: "Cliffs too square", fix: "Generating a fal rock kit to replace the stacked cubes", status: "in progress" }
   ]
 };

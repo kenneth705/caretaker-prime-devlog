@@ -429,6 +429,11 @@
     .entry ul { padding-left: 18px; font-size: 13.5px; color: var(--text-muted); }
     .entry li + li { margin-top: 4px; }
 
+    .texgrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .texgrid figure { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--edge); background: var(--glass-solid); }
+    .texgrid img { display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+    .texgrid figcaption { font-size: 10.5px; color: var(--text-faint); padding: 4px 8px; }
+    @media (max-width: 900px) { .texgrid { grid-template-columns: repeat(3, 1fr); } }
     /* lightbox */
     .lightbox { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 24px;
       background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); cursor: zoom-out; }
@@ -498,7 +503,7 @@
             Built in Unreal Engine 5.8 on a Mac by a team of AI agents directed by one person, with every art and
             sound asset generated on fal. This page documents how, including what didn't work.
           </p>
-          <p class="meta-line meta">Work in progress · starter island, first creature · updated as we go</p>
+          <p class="meta-line meta">Work in progress · playable greybox starter island, first creature · updated as we go</p>
         </div>
         <figure class="glass glass-raised hero-art">
           <img class="zoom" src="media/anchor_d_beach.webp" alt="Cel-shaded concept of a lavender crystal-rabbit adult creature holding a fruit on a beach beside a rope-bound pier" />
@@ -508,13 +513,43 @@
     </div>
 
     <nav class="toc" aria-label="Sections">
-      <a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
+      <a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
       <a href="#pipeline">fal pipeline</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
-      <a href="#sim">Simulation</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
+      <a href="#sim">Simulation</a><a href="#playtest">Playtest</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
     </nav>
 
     <section class="block">
       <div class="stats" id="stats"></div>
+    </section>
+
+    <!-- ── SECTION: in the engine now ── -->
+    <section class="block" id="engine-now">
+      <div class="section-head"><h2>In the engine now</h2><span class="hint">Unreal Engine 5.8 · greybox, not final art</span></div>
+      <div class="glass card">
+        <div class="media wide"><img class="zoom" src="media/island_close.webp" alt="In-engine screenshot: the baby Dumpling with a heart symbol beside the incubator, the caretaker stand-in and the vault door in the cave" /></div>
+        <div class="body">
+          <div class="title-row"><h3>Playable starter island</h3><span class="chip strong">playable</span></div>
+          <p>Walk the island, pick fruit, hand-feed and pet the baby. The baby's behaviour comes from the simulation: it reads the
+          sim's intent (wander, seek food, sleep, approach you) and acts it out on the navmesh, with a small emotion symbol overhead.
+          The caretaker is still the template mannequin.</p>
+        </div>
+      </div>
+      <div class="two" style="margin-top:14px">
+        <div class="glass card">
+          <div class="media wide"><img class="zoom" src="media/island_wide.webp" alt="Wide in-engine view of the greybox island: grass, sand, dirt path, cube cliffs and a pier" /></div>
+          <div class="body"><h3>The greybox island</h3><p>About 80 by 60 m: grass, sand, a dirt path, the cave cliff (still cubes), the incubator, three fruit trees and a broken pier.</p></div>
+        </div>
+        <div class="glass prose">
+          <h3>The sim runs inside Unreal</h3>
+          <ul>
+            <li>Loads the save (with a backup), then <strong>catches up on the time you were away</strong>.</li>
+            <li>Keeps a “While you were away” recap of what mattered.</li>
+            <li>Steps every 60 real seconds, from the wall clock, not the frame rate.</li>
+            <li>Autosaves every 5 minutes and on quit.</li>
+            <li><strong>11 of 11</strong> Unreal automation tests (5 sim-in-engine, 6 gameplay), plus the 17 sim tests.</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- ── SECTION: the game ── -->
@@ -593,6 +628,27 @@
         <div class="glass card"><div class="media"><img class="zoom" src="media/anchor_ground_tile.webp" alt="Tileable ground texture test" /></div>
           <div class="body"><h3>Ground tile</h3><p>Seam error at the wrap edges came out close to the interior baseline, so it tiles.</p></div></div>
       </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">The look in Unreal</h2><span class="hint">one post-process material for the whole game</span></div>
+      <div class="two">
+        <div class="glass prose">
+          <h3>How the cel-shading works</h3>
+          <ol>
+            <li><strong>Three tone bands.</strong> The light each pixel receives is split into lit, mid and dark, then multiplied back onto the flat base colour. Shadows lean violet.</li>
+            <li><strong>Coloured outlines.</strong> Drawn from depth, normal and stencil edges, on the nearer surface only, and coloured from the local fill instead of black.</li>
+            <li><strong>Warm rim light on characters.</strong> Characters are marked in the stencil buffer, which also keeps their faces out of the darkest band.</li>
+            <li><strong>Painted sky.</strong> An azure gradient with two-tone blob clouds.</li>
+            <li><strong>Off:</strong> Lumen, bloom, ambient occlusion, auto exposure. Fixed exposure keeps the bands predictable.</li>
+          </ol>
+          <blockquote class="quote">“like the cell shading”<span class="meta" style="display:block;font-size:12px;color:var(--text-faint);margin-top:4px">Kenneth, after playing, 2026-09-28</span></blockquote>
+        </div>
+        <div class="stack">
+          <div class="glass card"><div class="media wide"><img class="zoom" src="media/lookdev_a_wide_v2.webp" alt="Look-dev scene: imported props and palette shapes under the cel-shading post-process" /></div>
+            <div class="body"><h3>Look-dev scene</h3><p>Imported props, the baby and palette swatches, re-shot after every change to the look.</p></div></div>
+          <div class="glass card"><div class="media wide"><img class="zoom" src="media/lookdev_c_face_v2.webp" alt="Close-up of the baby creature under the cel-shading look" /></div>
+            <div class="body"><h3>The baby under the look</h3><p>In engine, with the character rim light and coloured outlines. Faces are kept out of the darkest band.</p></div></div>
+        </div>
+      </div>
     </section>
 
     <!-- ── SECTION: how we build it ── -->
@@ -656,7 +712,7 @@
         </div>
         <h3>Textures and sound</h3>
         <div class="chain" style="margin:8px 0 4px">
-          <span class="step">Tiling albedo<span class="meta">ideogram / z-image tiling</span></span><span class="arrow">→</span>
+          <span class="step">Tiling albedo<span class="meta">z-image turbo tiling</span></span><span class="arrow">→</span>
           <span class="step">2x2 seam check</span><span class="arrow">→</span>
           <span class="step">Normal map<span class="meta">patina</span></span>
           <span class="arrow" style="margin:0 6px">·</span>
@@ -673,26 +729,30 @@
               <tr><td>Creature mesh</td><td><code>fal-ai/meshy/v7.1/multi-image-to-3d</code></td></tr>
               <tr><td>Rig + animation set</td><td><code>fal-ai/meshy/rigging/multi-animation</code></td></tr>
               <tr><td>Prop meshes</td><td><code>meshy/v7.1/image-to-3d</code></td></tr>
-              <tr><td>Tiling albedo (default)</td><td><code>ideogram/v4/tiling</code></td></tr>
-              <tr><td>Tiling albedo (rock)</td><td><code>fal-ai/z-image/turbo/tiling</code></td></tr>
+              <tr><td>Tiling albedo (all 5)</td><td><code>fal-ai/z-image/turbo/tiling</code></td></tr>
+              <tr><td>Tiling albedo (tried, stalled)</td><td><code>ideogram/v4/tiling</code></td></tr>
               <tr><td>Normal maps</td><td><code>fal-ai/patina</code></td></tr>
               <tr><td>Sound effects</td><td><code>fal-ai/elevenlabs/sound-effects/v2</code></td></tr>
               <tr><td>Ambience loop</td><td><code>mirelo-ai/sfx1.6/text-to-audio</code></td></tr>
             </tbody>
           </table>
         </div>
-        <div class="glass card">
-          <div class="media sq"><img class="zoom" src="media/texture_rock_2x2.webp" alt="Faceted violet-gray rock texture tiled 2 by 2" /></div>
-          <div class="body">
-            <div class="title-row"><h3>Rock ground, tiled 2x2</h3><span class="chip dim">1 of 4 done</span></div>
-            <p>Tiling the texture 2x2 makes seams obvious. This one passed. Grass, sand and dirt path are next.</p>
+        <div class="glass prose">
+          <div class="title-row" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3 style="margin:0">Ground textures, tiled 2x2</h3><span class="chip strong">5 of 5 done</span></div>
+          <p style="margin:6px 0 12px">Tiling a texture 2x2 makes seams obvious. Ideogram tiling kept stalling, so all five came from z-image turbo tiling, with patina normal maps.</p>
+          <div class="texgrid">
+            <figure><img class="zoom" src="media/texture_grass_2x2.webp" alt="Grass texture tiled 2x2" /><figcaption class="meta">grass</figcaption></figure>
+            <figure><img class="zoom" src="media/texture_grass_weeds_2x2.webp" alt="Grass with weeds texture tiled 2x2" /><figcaption class="meta">grass + weeds</figcaption></figure>
+            <figure><img class="zoom" src="media/texture_sand_2x2.webp" alt="Sand texture tiled 2x2" /><figcaption class="meta">sand</figcaption></figure>
+            <figure><img class="zoom" src="media/texture_dirt_path_2x2.webp" alt="Dirt path texture tiled 2x2" /><figcaption class="meta">dirt path</figcaption></figure>
+            <figure><img class="zoom" src="media/texture_rock_2x2.webp" alt="Rock texture tiled 2x2" /><figcaption class="meta">rock</figcaption></figure>
           </div>
         </div>
       </div>
       <div class="glass prose" style="margin-top:14px">
         <h3>Starter sound set</h3>
         <p>Footsteps on grass, grass pull, pickup whoosh, fruit crunch, egg crack, hatch chime, happy chirp, hungry
-        whine, phone ping, and a looping island ambience. Every sound has a manifest like the images do.</p>
+        whine, phone ping, and a looping island ambience: 15 files, since some sounds have variants. All are imported into Unreal; pickup, crunch, chirp and whine already play in the greybox.</p>
       </div>
     </section>
 
@@ -720,31 +780,34 @@
       <div class="glass card" style="margin-top:18px">
         <div class="media wide"><img class="zoom" src="media/dumpling_3d_v1_review.webp" alt="Dumpling 3D v1 review sheet: concept beside 3D front, side, back and walk frames" /></div>
         <div class="body">
-          <div class="title-row"><h3>3D v1: Meshy 7.1, 24-bone rig, 12 clips</h3><span class="chip dim">not approved</span></div>
+          <div class="title-row"><h3>3D v1: Meshy 7.1, 24-bone rig, 12 clips</h3><span class="chip dim">rejected</span></div>
           <p>Concept on the left, the rigged mesh and walk-cycle frames on the right. The shape came through well. The
           colour reads browner and greyer than the concept because Meshy bakes shading into the texture.</p>
         </div>
       </div>
 
       <div class="glass prose" style="margin-top:14px">
-        <h3>An honest note on v1</h3>
-        <p>The v1 skin weights from the auto-rig deformed badly. Kenneth's review: the head deformed as it turned and
-        the arms warped the body. Measuring it confirmed him: head and neck influence was spread across the face, arm
-        bones pulled on the belly, and several joints sat outside the mesh (one knee was above the hip). An earlier
-        A-pose attempt was worse, which is why v1 already used a T-pose regeneration.</p>
-        <p><strong>v2 is in progress</strong>: a scripted re-skin with a rigid head and narrow blend bands at the neck,
-        armpits and hips, joint pivots moved back inside the body (bone orientations unchanged, so the same animation
-        clips still apply), a fix for a stray scale key in the idle clip, and a colour-corrected texture. It hasn't been
-        reviewed yet.</p>
+        <h3>An honest note on v1, and what v2 fixed</h3>
+        <p>The v1 skin weights from the auto-rig deformed badly, and Kenneth rejected it: the head deformed as it turned and the
+        arms warped the body. Measuring it confirmed him. Head and neck influence was spread across the face, arm bones pulled on
+        the belly, and several joints sat outside the mesh; <strong>one knee was above the hip</strong>.</p>
+        <p><strong>v2</strong> re-placed the joints inside the body and re-skinned the mesh by region: a rigid head, with narrow
+        blend bands at the neck, armpits and hips. Bone orientations are unchanged, so the same 12 clips still apply. Measured
+        head distortion went from <strong>up to 270 mm to 0</strong>, and belly leak on the wave clip from <strong>33 mm to 0</strong>.
+        The texture was colour-matched to the concept.</p>
+        <p>One more bug surfaced in Unreal: with any animation applied, the baby rendered about 1 cm tall. The animation files
+        carried their metre-to-centimetre scale differently from the mesh. Importing the animations at x100 on the root bone
+        fixed it. Still to do: the generic clips don't suit a round body (the wave is hidden, the belly creases, the feet dip),
+        so custom clips are next.</p>
       </div>
       <div class="glass card" style="margin-top:14px">
         <div class="media wide"><img class="zoom" src="media/dumpling_v2_weights_wave_walk.webp" alt="Skin weights comparison on the wave and walk clips: v1 on the left, v2 on the right" /></div>
-        <div class="body"><div class="title-row"><h3>Weights: v1 (left) vs v2 (right)</h3><span class="chip">in progress</span></div>
+        <div class="body"><div class="title-row"><h3>Weights: v1 (left) vs v2 (right)</h3><span class="chip strong">v2 done</span></div>
           <p>Same skeleton, same clips. Watch the head and belly in the wave frames. <a href="media/dumpling_v2_weights_compare.webp" class="zoomlink">Full sheet with all four clips</a>.</p></div>
       </div>
       <div class="glass card" style="margin-top:14px">
         <div class="media wide"><img class="zoom" src="media/dumpling_v2_texture_compare.webp" alt="Texture comparison: concept, v1 texture, v2 texture" /></div>
-        <div class="body"><div class="title-row"><h3>Texture: concept, v1, v2</h3><span class="chip">in progress</span></div><p>v2 pulls the tan and cream back toward the concept and flattens the baked shading, so the toon shader can do the shading.</p></div>
+        <div class="body"><div class="title-row"><h3>Texture: concept, v1, v2</h3><span class="chip strong">v2 done</span></div><p>v2 pulls the tan and cream back toward the concept and flattens the baked shading, so the toon shader can do the shading.</p></div>
       </div>
     </section>
 
@@ -777,7 +840,19 @@
           <tbody id="tests"></tbody>
         </table>
       </div>
-      <p class="meta" style="font-size:12px;color:var(--text-faint);margin-top:10px">ctest · 17 of 17 passing · full run under a second. Unreal integration is next; the core has not been wired into the engine yet.</p>
+      <p class="meta" style="font-size:12px;color:var(--text-faint);margin-top:10px">ctest · 17 of 17 passing · full run under a second. The same core now runs inside Unreal, with 11 more automation tests there.</p>
+    </section>
+
+    <!-- ── SECTION: playtest ── -->
+    <section class="block" id="playtest">
+      <div class="section-head"><h2>First playtest</h2><span class="hint">what Kenneth flagged, 2026-09-28</span></div>
+      <div class="glass table-scroll">
+        <table class="data">
+          <thead><tr><th>Flag</th><th>What we're doing</th><th>Status</th></tr></thead>
+          <tbody id="playtestrows"></tbody>
+        </table>
+      </div>
+      <p class="meta" style="font-size:12px;color:var(--text-faint);margin-top:10px">This is the review loop: Kenneth plays, flags what's off, and the agents fix it. Nothing is marked done until he says so.</p>
     </section>
 
     <!-- ── SECTION: engine lessons ── -->
@@ -804,6 +879,27 @@ xcrun metal --version</pre>
           agents talk to the editor. It's enabled in the project (editor only), next to the Python scripting plugin. For
           now the agents drive the editor with headless Python; MCP is not on the critical path yet. This UE version's
           SDK config also accepts Xcode 27, so C++ builds work on a current toolchain.</p>
+        </div>
+        <div class="glass prose">
+          <h3>4 · Renaming the template project</h3>
+          <p>UE 5.8 ignored <span class="meta">ActiveGameNameRedirects</span> when we renamed the ThirdPerson template's packages and classes.
+          <span class="meta">[CoreRedirects]</span> entries worked. Copying <span class="meta">TP_ThirdPerson</span> also misses the
+          shared template packs (Characters, Input, LevelPrototyping), so the mannequin and input assets had to be added by hand.</p>
+        </div>
+        <div class="glass prose">
+          <h3>5 · Headless test runs that silently skip the tests</h3>
+          <p><span class="meta">-ExecCmds="Automation RunTests ...; Quit"</span> quits before the tests run.
+          Use <span class="meta">-TestExit</span> so the editor exits when the test queue is done, and check the test count in the log.</p>
+        </div>
+        <div class="glass prose">
+          <h3>6 · A game window that never appears</h3>
+          <p>Launching <span class="meta">-game</span> through the <span class="meta">UnrealEditor-Cmd</span> binary plays sound but
+          shows no window on macOS. The launcher now starts the game through <span class="meta">UnrealEditor.app</span>.</p>
+        </div>
+        <div class="glass prose">
+          <h3>7 · Network outages mid-generation</h3>
+          <p>Two DNS outages killed running agents. Because every fal job is logged with its <span class="meta">request_id</span>,
+          the finished results were fetched afterwards rather than regenerated.</p>
         </div>
       </div>
     </section>
@@ -999,6 +1095,11 @@ xcrun metal --version</pre>
       $('devlog').innerHTML = (S.devlog || []).map(function (e) {
         return '<article class="glass entry"><div class="when meta">' + esc(e.date) + (e.time ? ' · ' + esc(e.time) : '') +
           '</div><h3>' + esc(e.title) + '</h3><ul>' + (e.items || []).map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul></article>';
+      }).join('');
+
+      $('playtestrows').innerHTML = (S.playtest || []).map(function (p) {
+        return '<tr><td><strong>' + esc(p.what) + '</strong></td><td class="desc">' + esc(p.fix) + '</td><td><span class="chip ' +
+          (p.status === 'done' ? 'strong' : 'dim') + '">' + esc(p.status) + '</span></td></tr>';
       }).join('');
 
       $('nextlist').innerHTML = (S.next || []).map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('');
