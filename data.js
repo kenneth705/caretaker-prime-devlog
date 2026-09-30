@@ -2,19 +2,83 @@
    To update the site, edit this file (and add images to media/), then publish.
    Keep everything a plain JS object (no fetch, works from file://). See UPDATING.md. */
 window.SITE = {
-  updated: "2026-09-28",
+  updated: "2026-09-29",
 
   /* Headline numbers in the stat row. */
   stats: [
-    { label: "Tests", value: "17 + 11", delta: "sim ctest + UE automation, all passing" },
-    { label: "Props", value: "13", delta: "concept + 3D mesh each" },
-    { label: "Creature clips", value: "12", delta: "on a 24-bone rig (v2)" },
-    { label: "Ground textures", value: "5", delta: "tiling albedo + normals" },
-    { label: "SFX files", value: "15", delta: "10 sounds, some with variants" }
+    { label: "Tests", value: "70 + 62", delta: "sim ctest + UE automation, all passing" },
+    { label: "End-to-end", value: "87 / 87", delta: "checks in the self-driving two-island run" },
+    { label: "Islands", value: "2 + hub", delta: "plus the race meadow" },
+    { label: "Props", value: "38", delta: "fal concept + 3D mesh each" },
+    { label: "Audio files", value: "34", delta: "19 new today: music, ambience, SFX" }
   ],
 
   /* Dev log: newest first. Copy an entry, change the date/title/items. */
   devlog: [
+    {
+      date: "2026-09-29", time: "17:41",
+      title: "Wave 6: love & legacy, world & feel",
+      items: [
+        "Love & legacy: adults who like each other court (hearts, walks side by side). Bless them from the phone and an egg appears at their home. Hero and Dark looks and archetype accents show how a creature was raised. An elder's final days glow warmer, and a quiet ceremony turns it into Life II with some memories kept. The Album got a Family tab.",
+        "World & feel: day and night follow the real local clock, with seasons, weather, stars and warm lamp pools, all in a second post-process pass so the approved cel look is untouched. Grass wears into paths where you walk. Islands can be named, and the phone has Settings with vacation mode and volumes.",
+        "The first pass made the idle creatures look T-posed: the custom idle clip kept the arms at the bind pose. The clips were re-authored with relaxed arms.",
+        "Integrated on a branch: 62 of 62 Unreal tests, 87 of 87 end-to-end checks, a 72-hour soak with no failures. Not on main yet."
+      ]
+    },
+    {
+      date: "2026-09-29", time: "16:07",
+      title: "Stability pass and a playtest build",
+      items: [
+        "A soak driver lived 168 in-game hours with every invariant checked: 0 failures after a round of fixes (input clashes between the phone, calls and photo mode, a job that emptied your bag, tree regrowth).",
+        "Tagged a playtest build for Kenneth with a fresh save, a key list, the loop to try and the known issues. He is playing it now.",
+        "19 audio files from fal: eight music pieces (ElevenLabs Music and Google Lyria), four ambience loops (Mirelo SFX) and seven sound effects. The loops were cut and crossfaded by script. No human has listened yet."
+      ]
+    },
+    {
+      date: "2026-09-29", time: "13:40",
+      title: "Wave 5: first race, homes and jobs, album",
+      items: [
+        "Sim v4 added shelters, homes, jobs, a deterministic race replay and an album, with a migration from v3.",
+        "The first race: an F-rank loop on its own map. You watch the sim's replay with visible mistakes (wrong turns, a stumble at the log, butterflies), then a podium and what your creature learned. Visiting rivals were first faked on the Unreal side; a later fix moved them into the sim so placement is fair.",
+        "Homes: build a nest, hut or communal house; offer a creature a home by carrying it there, and it may refuse. Jobs on Broadmeadow: gatherers and farmers.",
+        "Album: big moments photograph themselves, and P opens photo mode. The first captures came out much darker than the game until the capture target was switched to sRGB; photos now match the screen within a few levels."
+      ]
+    },
+    {
+      date: "2026-09-29", time: "11:56",
+      title: "The two-island MVP works end to end",
+      items: [
+        "Restore Kettle Island, find the old caretaker's notes, open the nursery door with their code, fetch the incubator part from the hub, repair and plant, finish any 3 of 8 goals, and launch to Broadmeadow with the giant slingshot. Bridges open its four areas, and the phone fast-travels through the nursery doors.",
+        "A self-driving run plays all of it from a fresh save in about 80 seconds: 87 of 87 checks and 26 screenshots. A Codex review found real bugs (stored eggs you couldn't get back, fruit lost in travel) and they were fixed before sign-off.",
+        "Mentor calls are paced: at most one at a quiet moment, and if several are due, the others fold into a catch-up line."
+      ]
+    },
+    {
+      date: "2026-09-29", time: "10:00",
+      title: "Phone, Prime Rafi and the MVP kit",
+      items: [
+        "The in-game phone (Creatures, Goals, Requests, Travel, Notes) and video calls from the mentor, Prime Rafi of Sector Nine, with a choppy-signal effect.",
+        "16 new props, a hub texture and 14 UI icons from fal, plus three Rafi portrait candidates. All waiting for Kenneth.",
+        "8 custom animation clips for the round body, since the generic mocap hid the wave and creased the belly. Two maps: Broadmeadow and the nursery hub."
+      ]
+    },
+    {
+      date: "2026-09-29", time: "08:47",
+      title: "Day plan: many agents in parallel",
+      items: [
+        "The orchestrator wrote a sim v3 contract (two islands, inventory, the nursery code, goals, travel) and split the day into lanes, each in its own git worktree, so sim, narrative, maps, assets, UI and animation could run at once.",
+        "A machine-wide lock keeps only one Unreal process running at a time, because parallel agents share one Mac."
+      ]
+    },
+    {
+      date: "2026-09-28", time: "23:18",
+      title: "Playtest 2 fixes and the first 30 minutes",
+      items: [
+        "Fixes from Kenneth's second playtest: a lone creature now roams, the mounds and rocks sit on the ground, cel water with shore foam, and trees you can shake for fruit. On the new sizes: \u201cThe size is great. I love it.\u201d",
+        "The first 30 minutes: pick one of three eggs, a 25-minute real-time hatch, a feeding tutorial, a second egg washes ashore, and a second creature that differs in tint, size and habits.",
+        "One agent's test run found Kenneth's real save and migrated it, because the \u201cis Unreal running\u201d check matched its own command line. The check now matches process names, and tests always use a throwaway save."
+      ]
+    },
     {
       date: "2026-09-28", time: "",
       title: "First playtest: what Kenneth flagged",
@@ -223,19 +287,19 @@ window.SITE = {
 
   /* What's next (short, plain). */
   next: [
-    "Fix the scale issues from the playtest: logs, caretaker, incubator and nursery door.",
-    "Replace the square cube cliffs with a new fal rock kit.",
-    "Rebuild the fruit tree from multiple views so it reads from every side.",
-    "An on-screen \u201cWhile you were away\u201d recap (today it goes to the log).",
-    "Custom animation clips for the round body: the generic clips hide the wave, crease the belly and dip the feet.",
-    "The second creature: an egg that washes ashore, and two babies that grow apart."
+    "Kenneth's feedback on the playtest build, and his review of the new art, Rafi's portrait and the audio.",
+    "Merge love & legacy and world & feel into main after that playtest.",
+    "Fix the known issues: a creature running away while carried, jobs lost when a creature leaves Broadmeadow, the landing camera.",
+    "Decide how fast neglect should bite on the island you're not on.",
+    "A real caretaker character to replace the grey template mannequin.",
+    "More islands behind the hub's locked doors."
   ],
 
   /* First-playtest notes (Kenneth's flags). status: "in progress" | "done". */
   playtest: [
-    { what: "Fruit tree is one-sided", fix: "Rebuilding it from a multi-view turnaround", status: "in progress" },
-    { what: "Logs and caretaker too big", fix: "Being rescaled", status: "in progress" },
-    { what: "Incubator and nursery door too small", fix: "Being rescaled", status: "in progress" },
-    { what: "Cliffs too square", fix: "Generating a fal rock kit to replace the stacked cubes", status: "in progress" }
+    { what: "Fruit tree is one-sided", fix: "Rebuilt from a multi-view turnaround (v2), waiting for his check", status: "awaiting review" },
+    { what: "Logs and caretaker too big", fix: "Rescaled. Kenneth: \u201cThe size is great. I love it.\u201d", status: "done" },
+    { what: "Incubator and nursery door too small", fix: "Rescaled, approved with the island sizes", status: "done" },
+    { what: "Cliffs too square", fix: "Replaced the stacked cubes with a fal rock kit, waiting for his check", status: "awaiting review" }
   ]
 };

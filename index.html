@@ -503,7 +503,7 @@
             Built in Unreal Engine 5.8 on a Mac by a team of AI agents directed by one person, with every art and
             sound asset generated on fal. This page documents how, including what didn't work.
           </p>
-          <p class="meta-line meta">Work in progress · playable greybox starter island, first creature · updated as we go</p>
+          <p class="meta-line meta">Work in progress · two playable islands, races, homes, an album and a family tree · updated as we go</p>
         </div>
         <figure class="glass glass-raised hero-art">
           <img class="zoom" src="media/anchor_d_beach.webp" alt="Cel-shaded concept of a lavender crystal-rabbit adult creature holding a fruit on a beach beside a rope-bound pier" />
@@ -513,7 +513,7 @@
     </div>
 
     <nav class="toc" aria-label="Sections">
-      <a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
+      <a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
       <a href="#pipeline">fal pipeline</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
       <a href="#sim">Simulation</a><a href="#playtest">Playtest</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
     </nav>
@@ -522,9 +522,128 @@
       <div class="stats" id="stats"></div>
     </section>
 
+    <!-- ── SECTION: day three (2026-09-29) ── -->
+    <section class="block" id="day3">
+      <div class="section-head"><h2>Day three: one big run</h2><span class="hint">2026-09-29 · about 20 agent lanes in parallel, 08:45 to 18:00</span></div>
+      <div class="glass prose">
+        <p>One orchestrated run turned the starter island into a <strong>two-island game</strong>. The orchestrator wrote each wave's plan
+        and a contract for the simulation, then dispatched lanes in parallel, each in its own git worktree: sim, narrative, maps, fal assets,
+        UI, animation, gameplay, then race, homes, album, love &amp; legacy, world &amp; feel and audio. Every lane came back with tests and
+        self-driving screenshot runs, and the orchestrator re-ran them before merging. The sim went from schema v2 to v5 over the day, each step with a
+        migration so old saves still load.</p>
+        <p style="margin-top:10px">Honest status: the caretaker is still the grey template mannequin. All the new art is waiting for Kenneth's review, and
+        no human has listened to the new music yet. Kenneth is playing the build now.</p>
+      </div>
+
+      <div class="glass card" style="margin-top:14px">
+        <div class="media wide"><img class="zoom" src="media/mvp_main_garden_oblique.webp" alt="Oblique aerial view of Broadmeadow, the main garden island: two rivers split it into four meadows joined by bridges, with dirt paths and cliffs" /></div>
+        <div class="body">
+          <div class="title-row"><h3>Broadmeadow, the main garden</h3><span class="chip strong">playable</span></div>
+          <p>The second island. Two rivers split it into four areas, and each broken bridge takes 4 branches to repair. It has 9 fruit trees
+          (sweet and sour), a request board that asks for fruit that grows on your island, a natural burrow for creatures to live in, and the race board.</p>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">The two-island MVP</h2><span class="hint">restore, unlock, launch, travel</span></div>
+      <div class="two">
+        <div class="glass prose">
+          <h3>The path through it</h3>
+          <ol>
+            <li><strong>Restore Kettle Island:</strong> pull grass, gather branch piles, push rocks aside. Clears raise the island from Abandoned to Habitable, Healthy and Thriving, and make room for more creatures.</li>
+            <li><strong>The old caretaker's notes.</strong> Six notes around the island hide the four-digit nursery door code between them.</li>
+            <li><strong>The nursery hub.</strong> Behind the vault door, an underground room with a door for every island, locked until you reach that island. A biscuit tin on a shelf holds the part that repairs the broken incubator.</li>
+            <li><strong>Plant and set goals.</strong> Hand-fed fruit leaves a seed to plant. Any 3 of 8 goals loosen the giant slingshot on the beach.</li>
+            <li><strong>Launch.</strong> Carry one creature (G) into the pouch: pull back, a tumbling flight, and a squash-and-bounce landing on Broadmeadow.</li>
+            <li><strong>Fast travel.</strong> Once both doors are open, the phone's Travel app takes you through the hub.</li>
+          </ol>
+          <p style="margin-top:10px">A self-driving run (<span class="meta">ct.TwoIslands</span>) plays all of it in about 80 seconds: 87 of 87 checks.</p>
+        </div>
+        <div class="glass card">
+          <div class="media wide"><img class="zoom" src="media/mvp_rafi_call.webp" alt="In-game video call from Prime Rafi, a bearded mentor with goggles, on landing at Broadmeadow" /></div>
+          <div class="body"><h3>Mentor calls from Prime Rafi</h3><p>The phone rings at story moments (15 triggers), only when things are quiet: never twice within a minute and never over another panel. If several are due, you get one call with a short catch-up line.</p></div>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:14px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/mvp_hub_doors.webp" alt="The underground nursery hub: a round room with five arched doors, each with a sign" /></div>
+          <div class="body"><h3>The nursery hub</h3><p>Five doors: Kettle Island, the main garden (renamed by a test run here) and three locked ones for islands still to come.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/mvp_slingshot_pullback.webp" alt="The caretaker in the pouch of a giant rope-and-timber slingshot on the beach" /></div>
+          <div class="body"><h3>The giant slingshot</h3><p>A 3-second launch you can skip. A creature you're carrying tumbles along.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/mvp_bridge_repaired.webp" alt="A repaired rope-and-plank bridge across a river on Broadmeadow" /></div>
+          <div class="body"><h3>A repaired bridge</h3><p>Repairing it removes the blocker and updates the navmesh, so creatures can cross too.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/mvp_phone_goals.webp" alt="The in-game phone showing the Goals app with three of eight goals done" /></div>
+          <div class="body"><h3>The phone</h3><p>Creatures, Goals, Requests, Travel, Notes and Call Prime, all filled from the live sim. Album, Build and Settings came later in the day.</p></div></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">The first race</h2><span class="hint">the Broadmeadow Loop · rank F · forgiving on purpose</span></div>
+      <div class="two">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/race_wrong_turn.webp" alt="Race HUD reading 3rd of 4: Tofu took a wrong turn at the hairpin, with two creatures showing question marks" /></div>
+          <div class="body"><h3>Mistakes you can see</h3><p>The sim decides the race. You watch it play back: wrong turns at hairpins (a “?” and a trot back), a stumble at the log, stopping to look at butterflies, a wide corner.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/race_results.webp" alt="Race results card: Tofu came 2nd of 4, with what it learned and its race rank progress" /></div>
+          <div class="body"><h3>What your creature learned</h3><p>Results list what it learned from its mistakes (cornering, pacing, obstacles, course memory) and its progress to the next rank. Visiting rivals race in the same deterministic sim.</p></div></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Homes, jobs and the album</h2><span class="hint">creatures choose; you can only offer</span></div>
+      <div class="grid">
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/life_hut_residents.webp" alt="A thatched hut with a sign reading Maple and Suki 2 of 2, two creatures and a heart by the door" /></div>
+          <div class="body"><h3>Shelters and homes</h3><p>Build a nest, a hut or a communal house anywhere valid. Carry a creature to one to offer it a home: trust, personality and friends decide whether it moves in.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/life_farmer_watering.webp" alt="A creature watering the ground with a watering can, a heart above its head" /></div>
+          <div class="body"><h3>Jobs</h3><p>On Broadmeadow, adolescents and older can be gatherers (branches to the stash box) or farmers (sweeter fruit that regrows faster). You suggest; they may say no.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/album_timeline.webp" alt="The phone's Album app: a timeline of polaroid photos grouped by day" /></div>
+          <div class="body"><h3>Album and photo mode</h3><p>Big moments photograph themselves (a hatch, a first trip, a mended bridge). P opens photo mode with three filters and a caption.</p></div></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Love and legacy</h2><span class="hint">nothing is ever deleted: lives continue</span></div>
+      <div class="grid">
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/legacy_looks_lineup.webp" alt="Five creatures in a row, some with a gold halo, a dark wisp or a leaf sprig on the crown" /></div>
+          <div class="body"><h3>Hero and Dark looks</h3><p>How you raise them shows: a soft gold halo and warmer colours, or a shadow wisp and cooler ones, plus archetype accents (leaf sprig, fin ridge, wing nubs, stone freckles).</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/legacy_ceremony_light.webp" alt="An elder creature sitting in a soft beam of light with gold motes rising, beside the caretaker" /></div>
+          <div class="body"><h3>The elder ceremony</h3><p>An elder in its final days glows warmer. If you choose to stay with it, it curls up in the light, becomes a glowing egg and hatches as Life II, keeping some of its memories.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/legacy_family_tree.webp" alt="Album Family tab: a creature's card with its lives, Life I and Life II, and its parents" /></div>
+          <div class="body"><h3>The family tree</h3><p>Two adults who like each other start courting (hearts, walks side by side). Bless them and an egg appears at their home. The Album's Family tab shows parents, lives and children.</p></div></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">World and feel</h2><span class="hint">display only: none of it changes the sim</span></div>
+      <div class="grid">
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/world_kettle_night.webp" alt="Kettle Island at night under a starry sky, the incubator glowing warmly in the distance" /></div>
+          <div class="body"><h3>Day and night from your clock</h3><p>The sun follows your local time and season. At night the light turns to moonlight with stars, and the incubators, nursery doors and shelters cast warm pools.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/world_hut_snow.webp" alt="A thatched hut on Broadmeadow in winter, snow on the roof and the ground, snow falling" /></div>
+          <div class="body"><h3>Seasons and weather</h3><p>Spring blossom, autumn reds, winter frost and patchy cel snow, rain streaks. All from a second post-process pass, so the approved cel look underneath is untouched.</p></div></div>
+        <div class="glass card"><div class="media"><img class="zoom" loading="lazy" src="media/world_worn_paths.webp" alt="Top-down view of Kettle Island with a worn dirt trail through the grass beside the stepping stones" /></div>
+          <div class="body"><h3>Worn paths</h3><p>Where you and your creatures walk most, the grass wears to dirt, and it grows back over a few days. This is five simulated days of walking.</p></div></div>
+      </div>
+      <div class="glass prose" style="margin-top:14px">
+        <h3>Music and ambience, all from fal</h3>
+        <p>19 new audio files: eight music pieces (a day bed for each island, a night lullaby, the hub, the race and two stings, and the ceremony) from
+        ElevenLabs Music and Google Lyria, four ambience loops (shore by day and night, meadow, hub hum) from Mirelo SFX, and seven sound effects.
+        An audio director crossfades the beds at dusk, lowers the music during mentor calls and brings the shore up as you walk to the sea. The loops
+        were cut and crossfaded by script and checked with measurements. <strong>Nobody has listened to them yet.</strong></p>
+        <p>Also new: naming your islands on first arrival, vacation mode and volume controls in the phone's Settings.</p>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">New fal art</h2><span class="hint">all pending Kenneth's review</span></div>
+      <div class="grid">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/kit_day2_contact.webp" alt="Contact sheet of the day-2 kit: grass, branch piles, notes, keypad, slingshot, bridges, trees, hub doors and UI icons, concept beside 3D render" /></div>
+          <div class="body"><div class="title-row"><h3>The MVP kit</h3><span class="chip dim">pending review</span></div><p>16 props (restoration, notes, keypad, slingshot, bridges, hub doors, request board, trees), a hub floor texture and 14 UI icons. Concept on the left, Meshy 7.1 mesh on the right. Three weak meshes were redone.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/kit_life_contact.webp" alt="Contact sheet of shelters: a twig nest, a thatched hut, a mushroom house, a stash box and a watering can, plus job icons" /></div>
+          <div class="body"><div class="title-row"><h3>Homes and jobs kit</h3><span class="chip dim">pending review</span></div><p>Nest, hut, communal house, stash box and watering can, plus job icons. The race kit (gate, flag posts, entry board, podium) was made the same way.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/rafi_portraits.webp" alt="Three portrait candidates for the mentor Prime Rafi: goggles, sun hat and tinkerer" /></div>
+          <div class="body"><div class="title-row"><h3>Prime Rafi candidates</h3><span class="chip dim">Kenneth to pick</span></div><p>Three looks for the mentor, each with a desert variant. Goggles is in the game for now.</p></div></div>
+      </div>
+
+      <div class="glass prose" style="margin-top:14px">
+        <h3>Still placeholder or unfinished</h3>
+        <ul>
+          <li>The caretaker is the grey template mannequin, including in the ceremony.</li>
+          <li>Love &amp; legacy and world &amp; feel were verified on an integration branch (62 of 62 Unreal tests, a 72-hour soak with no failures) and merged into main this evening; that is the build Kenneth is playing now.</li>
+          <li>Known issues in the build: a creature can run away while you carry it, taking a creature off Broadmeadow clears its job, the landing camera is a bit far, trees keep their painted fruit after harvest.</li>
+          <li>An open question for Kenneth: creatures left alone on the other island get neglect warnings, and one ran away within 7 in-game days in the soak. Is that the right pace?</li>
+        </ul>
+      </div>
+    </section>
+
     <!-- ── SECTION: in the engine now ── -->
     <section class="block" id="engine-now">
-      <div class="section-head"><h2>In the engine now</h2><span class="hint">Unreal Engine 5.8 · greybox, not final art</span></div>
+      <div class="section-head"><h2>Day two: in the engine</h2><span class="hint">2026-09-28 · Unreal Engine 5.8 · greybox, not final art</span></div>
       <div class="glass card">
         <div class="media wide"><img class="zoom" src="media/island_close.webp" alt="In-engine screenshot: the baby Dumpling with a heart symbol beside the incubator, the caretaker stand-in and the vault door in the cave" /></div>
         <div class="body">
@@ -840,7 +959,7 @@
           <tbody id="tests"></tbody>
         </table>
       </div>
-      <p class="meta" style="font-size:12px;color:var(--text-faint);margin-top:10px">ctest · 17 of 17 passing · full run under a second. The same core now runs inside Unreal, with 11 more automation tests there.</p>
+      <p class="meta" style="font-size:12px;color:var(--text-faint);margin-top:10px">ctest · the first 17 cases, from day one. By 2026-09-29 the sim is at schema v5 with 70 of 70 cases passing, and Unreal runs 62 automation tests on top.</p>
     </section>
 
     <!-- ── SECTION: playtest ── -->
