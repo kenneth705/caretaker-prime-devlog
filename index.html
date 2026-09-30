@@ -503,7 +503,7 @@
             Built in Unreal Engine 5.8 on a Mac by a team of AI agents directed by one person, with every art and
             sound asset generated on fal. This page documents how, including what didn't work.
           </p>
-          <p class="meta-line meta">Work in progress · two playable islands, races, homes, an album and a family tree · updated as we go</p>
+          <p class="meta-line meta">Work in progress · two playable islands, races, homes, an album and a family tree, now restyled · updated as we go</p>
         </div>
         <figure class="glass glass-raised hero-art">
           <img class="zoom" src="media/anchor_d_beach.webp" alt="Cel-shaded concept of a lavender crystal-rabbit adult creature holding a fruit on a beach beside a rope-bound pier" />
@@ -513,13 +513,66 @@
     </div>
 
     <nav class="toc" aria-label="Sections">
-      <a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
+      <a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
       <a href="#pipeline">fal pipeline</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
       <a href="#sim">Simulation</a><a href="#playtest">Playtest</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
     </nav>
 
     <section class="block">
       <div class="stats" id="stats"></div>
+    </section>
+
+    <!-- ── SECTION: day four (2026-09-30) ── -->
+    <section class="block" id="day4">
+      <div class="section-head"><h2>Day four: the restyle</h2><span class="hint">2026-09-30 · wave 7 overnight, wave 8 in the morning</span></div>
+      <div class="glass prose">
+        <p>The game played, but it looked like a greybox with a cel filter. Kenneth picked a set of <strong>AI concept paintings</strong> as the
+        target look, and two art waves moved the real game toward them. <strong>Wave 7</strong> (overnight, six lanes) added dense wind-swept grass,
+        resculpted the islands into terraces with dirt lips, gave the look painterly shading, a painted sky and a warm night glow, and added footsteps
+        that change with the surface. <strong>Wave 8</strong> (five lanes, guided by Kenneth's research report on how Zelda-style games are rendered)
+        added fog, cloud shadows, new trees and bushes, moving water, matte props and an overgrown nursery hub.</p>
+        <p style="margin-top:10px">Honest status: Kenneth hasn't reviewed wave 8 yet, the caretaker is still the grey mannequin, and the
+        concept frames below are AI paintings of where we're heading, not in-game shots.</p>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Same camera, three days</h2><span class="hint">the Kettle Island meadow, midday</span></div>
+      <div class="two">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/restyle_meadow_0_before.webp" alt="Before the restyle: flat green ground with dotted grass tufts, a round tree and grey cliffs" /></div>
+          <div class="body"><div class="title-row"><h3>Before</h3><span class="chip dim">day three</span></div><p>Flat ground with a patterned grass texture and scattered tufts.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/restyle_meadow_1_wave7.webp" alt="Wave 7: tall dense grass across a raised terrace with a dirt lip, the tree on the plateau" /></div>
+          <div class="body"><div class="title-row"><h3>Wave 7</h3><span class="chip dim">overnight</span></div><p>Dense instanced grass and a sculpted terrace with a dirt lip. The grass was bright and uniform.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/restyle_meadow_2_wave8.webp" alt="Wave 8: softer grass with darker roots, a rebuilt rounded tree canopy, bushes on the terrace edge and haze on the cliffs" /></div>
+          <div class="body"><div class="title-row"><h3>Wave 8</h3><span class="chip strong">now</span></div><p>Grass roots share the ground's colour, a new canopy, bushes on the lip and height fog on the cliffs.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/restyle_meadow_3_concept.webp" alt="AI concept art target: rolling meadow with sandy paths, wildflowers, a fruit tree on a mossy ledge and cliffs behind" /></div>
+          <div class="body"><div class="title-row"><h3>The target</h3><span class="chip dim">AI concept art</span></div><p>The concept painting for this camera. Still ahead of us: the rolling paths, flowers and softer ledges.</p></div></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 8 in the engine</h2><span class="hint">in-engine frames, no HUD · pending Kenneth's review</span></div>
+      <div class="grid">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w8_kettle_oblique.webp" alt="Aerial view of Kettle Island: terraced green plateaus, stepping-stone path, sandy beach and turquoise shallows" /></div>
+          <div class="body"><h3>Kettle Island from above</h3><p>The resculpted plateaus and the path in the valley. High views get a little lift so they don't go dull.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w8_river_bridge.webp" alt="A Broadmeadow river with flow lines, dune grass on the banks and a broken plank bridge" /></div>
+          <div class="body"><h3>River and bridge</h3><p>Flow lines on the river, foam around the posts and grass along the banked edges.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w8_kettle_night.webp" alt="Kettle Island at night from above: blue-green grass, moonlit sand and small warm lamp glows" /></div>
+          <div class="body"><h3>Night, toned down</h3><p>After the playtest, the lamp glow is half as strong and fades up close. Night grass is now deep blue-green.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w8_hub.webp" alt="The nursery hub overgrown with grass and ivy, sun shafts falling on five arched doors" /></div>
+          <div class="body"><h3>The overgrown hub</h3><p>A grass carpet, ivy on the walls, golden sun shafts and leaf shadows on the floor.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w8_tree_close.webp" alt="Close-up of a new tree: a rounded canopy of leaf clusters with one orange fruit, tall grass around the trunk" /></div>
+          <div class="body"><h3>New trees</h3><p>Canopies built from rounded leaf clusters that sway. Real fruit sits on the canopy instead of being painted on.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w8_beach_pier.webp" alt="The beach and broken pier: waves washing onto wet sand, two supply crates in front" /></div>
+          <div class="body"><h3>Beach and pier</h3><p>Waves wash up and leave a wet band on the sand. Props are matte now and sit into the ground.</p></div></div>
+      </div>
+
+      <div class="glass prose" style="margin-top:14px">
+        <h3>What didn't work, and what's left</h3>
+        <ul>
+          <li>Unreal's newest foliage tools (Nanite foliage, GPU PCG) are experimental on the Mac, with crash and floating-grass reports, so the grass is plain instanced meshes placed by our own code.</li>
+          <li>Wave 7 made the frame cost rise from about 6.5 to 9 ms. Wave 8 brought it back to about 8 ms at 1080p.</li>
+          <li>Wave 8's first review found regressions (darker overviews, a bare patch by the landing path, grey night grass). A fix pass sorted them before these shots.</li>
+          <li>A power cut hit mid-wave. Work lives in separate git worktrees, so only a few temporary scripts were lost.</li>
+          <li>Still to do: the race track is a bit neon from above, the canopies are rounder than the concept, and the caretaker is still a mannequin.</li>
+        </ul>
+      </div>
     </section>
 
     <!-- ── SECTION: day three (2026-09-29) ── -->

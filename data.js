@@ -2,19 +2,55 @@
    To update the site, edit this file (and add images to media/), then publish.
    Keep everything a plain JS object (no fetch, works from file://). See UPDATING.md. */
 window.SITE = {
-  updated: "2026-09-29",
+  updated: "2026-09-30",
 
   /* Headline numbers in the stat row. */
   stats: [
-    { label: "Tests", value: "70 + 62", delta: "sim ctest + UE automation, all passing" },
+    { label: "Tests", value: "70 + 71", delta: "sim ctest + UE automation, all passing" },
     { label: "End-to-end", value: "87 / 87", delta: "checks in the self-driving two-island run" },
+    { label: "GPU frame", value: "~8 ms", delta: "at 1080p after two art waves" },
     { label: "Islands", value: "2 + hub", delta: "plus the race meadow" },
-    { label: "Props", value: "38", delta: "fal concept + 3D mesh each" },
-    { label: "Audio files", value: "34", delta: "19 new today: music, ambience, SFX" }
+    { label: "Audio files", value: "76", delta: "42 new footstep sounds on fal" }
   ],
 
   /* Dev log: newest first. Copy an entry, change the date/title/items. */
   devlog: [
+    {
+      date: "2026-09-30", time: "11:05",
+      title: "Wave 8: a second polish pass",
+      items: [
+        "Kenneth liked wave 7 but wanted it to look better, and handed over a research report on how Zelda-style games are rendered. Five agent lanes worked through it in parallel.",
+        "Light and sky: soft shading on the world and a crisp cel edge on characters and props, real height fog, painted cloud banks on the horizon, cloud shadows drifting over the land and a warmer sun.",
+        "Grass and ground now share one colour field, so the grass roots melt into the ground instead of sitting on it. Path edges fade gradually, dune grass reaches the upper beaches, and there are fewer white spike flowers.",
+        "New tree canopies built from rounded leaf clusters (no more painted-on fruit) that sway in the wind, plus about 190 bushes along cliff lips and path corners.",
+        "Water: waves wash up and leave wet sand, rivers show their flow, foam gathers around posts and rocks, and the sun and moon glint on the sea.",
+        "Props and rocks went matte, with bases that blend into the ground, plus scattered pebbles, shells, driftwood, flowers and vines. The nursery hub is now overgrown, with ivy and golden sun shafts.",
+        "A review found problems, so a fix pass followed: high overviews had gone darker and duller than wave 7, a bare patch appeared beside Broadmeadow's landing path (a grass-clearing rule matched the wrong name), the night grass was grey and the hub's leaf shadows were blue.",
+        "The power went out mid-wave. Each lane works in its own git worktree, so almost nothing was lost: only a few temporary scripts.",
+        "Frame time came back down to about 8 ms at 1080p. Kenneth hasn't reviewed the new look yet."
+      ]
+    },
+    {
+      date: "2026-09-30", time: "07:05",
+      title: "Morning playtest fixes",
+      items: [
+        "Kenneth played the new look and found the night glow overwhelming, \"like orange fog\" when you stand next to a lamp. The halo, light pools and bloom are halved, and the halo fades as you walk into it.",
+        "The nest and hut were stuck in the ground after the terrain was reshaped. Shelters now snap to the real ground when placed and when a save loads, so old saves fix themselves.",
+        "New: hold X to take a shelter apart. You get the branches back and the residents move out."
+      ]
+    },
+    {
+      date: "2026-09-30", time: "01:45",
+      title: "Wave 7: an overnight restyle",
+      items: [
+        "Kenneth approved a set of AI concept paintings as the target look and asked for the whole game to move toward it: rolling hills, a painted, weathered cel look, the dense grass, the water and beaches, a softer night glow and quiet footsteps.",
+        "Grass: dense, wind-swept blades from our own instanced meshes, with a far tier out to a few hundred metres and dune grass on the beaches. The grass bends away from you and your creatures. Unreal's newer Nanite foliage tools are still experimental on the Mac, with crash reports, so we didn't use them. There's a Light, Medium or Full grass setting on the phone.",
+        "Terrain: the islands were resculpted into terraces with dirt lips on the edges. Kettle Island has two big plateaus with the path in a valley, and Broadmeadow has six terraces and banked rivers.",
+        "Look: softer painterly shading bands, brush-stroke noise, a painted sky and haze, warm lamp pools at night and new water with foam lines and wet sand.",
+        "Footsteps: 42 fal sounds for grass, sand, dirt, stone, wood and water, picked by the surface under your feet, plus creature pitter-patter.",
+        "What didn't work yet: views from high up looked flatter than the concept, far beaches had almost no dune grass, trees and props were still the old kit, and the frame cost rose from about 6.5 to 9 ms."
+      ]
+    },
     {
       date: "2026-09-29", time: "17:41",
       title: "Wave 6: love & legacy, world & feel",
@@ -287,11 +323,11 @@ window.SITE = {
 
   /* What's next (short, plain). */
   next: [
-    "Kenneth's feedback on the playtest build, and his review of the new art, Rafi's portrait and the audio.",
-    "Merge love & legacy and world & feel into main after that playtest.",
-    "Fix the known issues: a creature running away while carried, jobs lost when a creature leaves Broadmeadow, the landing camera.",
-    "Decide how fast neglect should bite on the island you're not on.",
-    "A real caretaker character to replace the grey template mannequin.",
+    "Kenneth is playtesting wave 8 and reviewing the new look.",
+    "Grass and path polish: the race track seen from above is a bit neon and blotchy, and a few glint slivers on the water need calming.",
+    "Trees closer to the concept (lobed canopies rather than round ones) and warmer hub walls.",
+    "A real caretaker character: it is still the grey template mannequin.",
+    "Listen to the footsteps and the music, and review the waiting fal art.",
     "More islands behind the hub's locked doors."
   ],
 
