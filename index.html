@@ -351,6 +351,11 @@
     .tile p { font-size: 13.5px; color: var(--text-muted); }
     .tile .num { font-size: 11.5px; color: var(--text-faint); margin-bottom: 6px; }
     .prose ul, .prose ol { padding-left: 20px; }
+    .models ul { list-style: none; padding-left: 0; }
+    .models li { display: flex; flex-direction: column; gap: 2px; }
+    .models li + li { margin-top: 10px; }
+    .models code { font-size: 12.5px; color: var(--text); overflow-wrap: anywhere; }
+    .models .note { font-size: 13px; color: var(--text-muted); }
     .prose li + li { margin-top: 6px; }
     .stack { display: flex; flex-direction: column; gap: 18px; }
 
@@ -503,7 +508,7 @@
             Built in Unreal Engine 5.8 on a Mac by a team of AI agents directed by one person, with every art and
             sound asset generated on fal. This page documents how, including what didn't work.
           </p>
-          <p class="meta-line meta">Work in progress · two playable islands, races, homes, an album and a family tree, now restyled · updated as we go</p>
+          <p class="meta-line meta">Work in progress · two playable islands, a real caretaker, creatures that grow up, the start of crafting · updated as we go</p>
         </div>
         <figure class="glass glass-raised hero-art">
           <img class="zoom" src="media/anchor_d_beach.webp" alt="Cel-shaded concept of a lavender crystal-rabbit adult creature holding a fruit on a beach beside a rope-bound pier" />
@@ -513,13 +518,102 @@
     </div>
 
     <nav class="toc" aria-label="Sections">
-      <a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
-      <a href="#pipeline">fal pipeline</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
+      <a href="#day5">Days five to seven</a><a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
+      <a href="#pipeline">fal pipeline</a><a href="#models">Models we use</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
       <a href="#sim">Simulation</a><a href="#playtest">Playtest</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
     </nav>
 
     <section class="block">
       <div class="stats" id="stats"></div>
+    </section>
+
+    <!-- ── SECTION: days five to seven (2026-10-01 to 10-03) ── -->
+    <section class="block" id="day5">
+      <div class="section-head"><h2>Days five to seven: a real caretaker, creatures that grow up, crafting</h2><span class="hint">2026-10-01 to 10-03 · waves 9, 10 and 11A, two playtest rounds, a trailer started</span></div>
+      <div class="glass prose">
+        <p>Three waves in three days. <strong>Wave 9</strong> replaced the grey mannequin with a real caretaker: designed with Kenneth, built in 3D,
+        skinned and animated, plus a title screen, baby coat variants and a grass fix. <strong>Wave 10</strong> gave the creatures real grown-up
+        bodies and some adult behaviour. <strong>Wave 11</strong> is the big one: crafting, then decorating, then creatures that build the world
+        themselves. Its first phase (tools, chopping, mining, a workbench) is merged. Two rounds of Kenneth's playtest notes were fixed in between.</p>
+        <p style="margin-top:10px">Honest status: Kenneth chose the caretaker design and approved the creature bodies, but most of what's below
+        is agent work still waiting for his review: the caretaker's model and animations, the title screen, the coats, the crafting concepts and
+        the playtest fixes. The crafting meshes are placeholders.</p>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 9: the caretaker</h2><span class="hint">from 80 drawings to a playable character</span></div>
+      <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w9_caretaker_model.webp" alt="The 3D caretaker in game: turnaround views, a face close-up, walking, jogging, carrying an egg and a baby creature, petting, waving and the landing tuck" /></div>
+          <div class="body"><div class="title-row"><h3>The Tech, in game</h3><span class="chip dim">pending review</span></div>
+          <p>Tripo H3.1 multiview won a five-way bake-off. The model is skinned to Unreal's mannequin skeleton so the template's walking and running work, with 17 extra clips keyed in Blender.</p></div></div>
+      <div class="two" style="margin-top:18px">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w9_caretaker_styles.webp" alt="A grid of eight caretaker characters redrawn in ten shape styles, from chibi to tall elegant to plush felt" /></div>
+          <div class="body"><div class="title-row"><h3>Ten styles × eight characters</h3><span class="chip strong">Kenneth picked</span></div>
+          <p>Eight caretaker concepts, each redrawn in ten shape styles with a note on how hard it would be to rig. Kenneth chose the Tall Elegant style and the Gadget Tech character.</p></div></div>
+        <div class="stack">
+          <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w9_baby_coats.webp" alt="Twelve baby creatures in tall grass, each with a different coat colour and marking" /></div>
+            <div class="body"><div class="title-row"><h3>Baby coats</h3><span class="chip dim">pending review</span></div>
+            <p>8 coats and 8 markings, read from each creature's genes and passed to its children. Peach, cream, honey, rose, sage, lilac, cocoa and ash, with stars, saddles, freckles, stripes and socks.</p></div></div>
+          <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w9_grass_push.webp" alt="Before and after, seen from above: the old grass push flattened blades into a bright yellow ring; the new one bends them aside" /></div>
+            <div class="body"><h3>Grass that bends, not flattens</h3>
+            <p>Before, blades pushed by the player squashed into a flat bright ring. Now each blade bends at its root and keeps its length.</p></div></div>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 10: creatures grow up</h2><span class="hint">adolescent and adult bodies for four lines · approved by Kenneth</span></div>
+      <div class="glass card">
+        <div class="media wide"><img class="zoom" loading="lazy" src="media/w10_stage_bodies.webp" alt="Eight creature bodies in game. Top row, adolescents: Leaf, Fin, Wing and Stone. Bottom row, adults: Leaf, Fin, Wing and Stone. A small baby and the caretaker stand in the background" /></div>
+        <div class="body">
+          <div class="title-row"><h3>Leaf, Fin, Wing, Stone</h3><span class="chip strong">approved</span></div>
+          <p>Top row: adolescents at 85 cm. Bottom row: adults at 120 cm. A baby stands behind each one for scale. Concepts were drawn with nano-banana-pro, built with
+          Tripo H3.1 multiview (8 of 8 on the first try) and fitted to the baby's skeleton, so every existing animation plays on them. Adults can't be carried,
+          but they can be shoved, and F asks a creature to follow you. Kenneth: &ldquo;these look great&rdquo;. He hasn't played with them yet.</p>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 11 Phase A: crafting</h2><span class="hint">placeholder meshes in game · concepts waiting for Kenneth</span></div>
+      <div class="two">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w11_craft_concepts.webp" alt="Concept sheet: axe, pick, hammer and sickle in four tiers (Timber, Stone, Brass, Solarpunk), three wild tree species and an oak's growth stages" /></div>
+          <div class="body"><div class="title-row"><h3>Tools and trees</h3><span class="chip dim">pending review</span></div>
+          <p>Four tool tiers, from lashed timber to a vine-wrapped Solarpunk set, plus pine, birch and oak and the stages an oak grows through. The game logic is in; the art isn't yet.</p></div></div>
+        <div class="glass prose">
+          <h3>What Phase A adds</h3>
+          <ul>
+            <li>An axe, pick, hammer and sickle in 4 tiers, with no durability to manage.</li>
+            <li>Chop wild trees and fruit trees. The Prime calls to warn you about the fruit trees, up to three times.</li>
+            <li>Mine rocks. Soft rocks give stone by hand, so you can build a first workbench before you own a pick.</li>
+            <li>Grass gives fiber, and cleared grass and branch piles grow back each day, so materials don't run out.</li>
+            <li>A workbench menu, the held tool in your hand and a materials list on the phone.</li>
+            <li>Save schema v6, with a migration tested on a real older save.</li>
+          </ul>
+          <p style="margin-top:10px">Next come decorating, then creatures doing jobs when you ask, then creatures that pass ideas to each other and form crews.</p>
+        </div>
+      </div>
+      <div class="glass card" style="margin-top:18px">
+        <div class="media wide"><img class="zoom" loading="lazy" src="media/w11_weights_v2.webp" alt="The caretaker before and after the skin weight fix: at idle the v1 spine curves into an S and v2 stands straight; jogging, v1's shoulder and hip bend badly and v2 is clean" /></div>
+        <div class="body"><div class="title-row"><h3>Skin weights v2</h3><span class="chip dim">pending review</span></div>
+        <p>Kenneth circled where the caretaker bent badly. v1 is on the left of each pair, v2 on the right: a straight spine at idle and a clean shoulder and hip when jogging. Shoulders still stretch a little with the arms overhead.</p></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Playtest fixes</h2><span class="hint">Kenneth's notes from 2026-10-03 · he hasn't replayed yet</span></div>
+      <div class="two">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/fix_grounding.webp" alt="Before and after: a rope bridge sitting low in the river now spans it from bank to bank; a planted tree buried to its canopy now stands on its trunk" /></div>
+          <div class="body"><h3>Sunk bridges and trees</h3>
+          <p>Generated meshes have their pivot in the middle, and the game placed them by it: bridges sat in the water and planted trees sat 2 m underground. They now sit on their banks and on the ground.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/fix_roam.webp" alt="Broadmeadow from above, three minutes after landing: before, the creatures (coloured rings) are still clustered by the landing pad; after, they are spread across the meadow" /></div>
+          <div class="body"><h3>Creatures that roam</h3>
+          <p>Kenneth: the creatures &ldquo;just stay right where the player lands&rdquo;. Now they scatter on arrival, wander toward points of interest and meet at social spots. Earlier the same day they stood frozen in a row; now they stroll.</p></div></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">A trailer, in progress</h2><span class="hint">stills from a work-in-progress cut · not released</span></div>
+      <div class="glass card">
+        <div class="media wide"><img class="zoom" loading="lazy" src="media/trailer_keyframes.webp" alt="Eighteen stills from the trailer cut: the logo over Broadmeadow, eggs on the beach, a baby in the grass, the caretaker with creatures, the slingshot launch, homes, a bridge, rain, snow and night, and the closing logo" /></div>
+        <div class="body">
+          <div class="title-row"><h3>Cut in HyperFrames from in-game shots</h3><span class="chip dim">in progress</span></div>
+          <p>A console command flies the camera and records the shots offscreen, and the edit is built in HyperFrames, which makes video from HTML. The narration took three tries:
+          the mentor's voice, then a movie-trailer announcer on two TTS engines, which Kenneth turned down. So an agent built a casting page with 25 voices across
+          ElevenLabs v3, Gemini TTS and MiniMax. Kenneth wrote a first-person script for the player character, an apprentice caretaker who arrives to find the Prime gone,
+          and picked one of 11 young voices reading it. The timing and the mix are still being reviewed.</p>
+        </div>
+      </div>
     </section>
 
     <!-- ── SECTION: day four (2026-09-30) ── -->
@@ -834,7 +928,7 @@
         <div class="lanes">
           <div class="glass lane"><h3>Planning &amp; art direction</h3><div class="who meta">Fable / Opus subagents</div>
             <ul><li>Plan and architecture</li><li>Art bible and prompt blocks</li><li>Concepts, picks with written reasons</li></ul></div>
-          <div class="glass lane"><h3>Engine code</h3><div class="who meta">Codex</div>
+          <div class="glass lane"><h3>Engine code</h3><div class="who meta">Codex (GPT-6 Astra / Sol)</div>
             <ul><li>C++20 simulation core</li><li>Save schema and migrations</li><li>CMake + ctest loop</li></ul></div>
           <div class="glass lane"><h3>3D pipeline</h3><div class="who meta">Opus / Sonnet subagents</div>
             <ul><li>fal generation scripts</li><li>Headless Blender checks and fixes</li><li>FBX export for Unreal</li></ul></div>
@@ -875,6 +969,14 @@
           <span class="step">Blender check<span class="meta">bones, clips, holes</span></span><span class="arrow">→</span>
           <span class="step">Unreal<span class="meta">FBX import</span></span>
         </div>
+        <h3>Caretaker and grown-up creatures <span class="meta" style="font-weight:400">(from wave 9)</span></h3>
+        <div class="chain" style="margin:8px 0 16px">
+          <span class="step">Concept<span class="meta">nano-banana-pro/edit</span></span><span class="arrow">→</span>
+          <span class="step">Locked multi-view sheet</span><span class="arrow">→</span>
+          <span class="step">Multiview to 3D<span class="meta">Tripo H3.1</span></span><span class="arrow">→</span>
+          <span class="step">Fit to a shared skeleton<span class="meta">headless Blender</span></span><span class="arrow">→</span>
+          <span class="step">Unreal<span class="meta">all clips reused</span></span>
+        </div>
         <h3>Props</h3>
         <div class="chain" style="margin:8px 0 16px">
           <span class="step">2 concepts<span class="meta">nano-banana-pro/edit</span></span><span class="arrow">→</span>
@@ -892,23 +994,7 @@
           <span class="step">Ambience<span class="meta">Mirelo SFX 1.6</span></span>
         </div>
       </div>
-      <div class="two" style="margin-top:14px">
-        <div class="glass table-scroll">
-          <table class="data">
-            <thead><tr><th>Job</th><th>fal endpoint</th></tr></thead>
-            <tbody>
-              <tr><td>Concepts, turnarounds</td><td><code>fal-ai/nano-banana-pro/edit</code></td></tr>
-              <tr><td>Creature mesh</td><td><code>fal-ai/meshy/v7.1/multi-image-to-3d</code></td></tr>
-              <tr><td>Rig + animation set</td><td><code>fal-ai/meshy/rigging/multi-animation</code></td></tr>
-              <tr><td>Prop meshes</td><td><code>meshy/v7.1/image-to-3d</code></td></tr>
-              <tr><td>Tiling albedo (all 5)</td><td><code>fal-ai/z-image/turbo/tiling</code></td></tr>
-              <tr><td>Tiling albedo (tried, stalled)</td><td><code>ideogram/v4/tiling</code></td></tr>
-              <tr><td>Normal maps</td><td><code>fal-ai/patina</code></td></tr>
-              <tr><td>Sound effects</td><td><code>fal-ai/elevenlabs/sound-effects/v2</code></td></tr>
-              <tr><td>Ambience loop</td><td><code>mirelo-ai/sfx1.6/text-to-audio</code></td></tr>
-            </tbody>
-          </table>
-        </div>
+      <div style="margin-top:14px">
         <div class="glass prose">
           <div class="title-row" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3 style="margin:0">Ground textures, tiled 2x2</h3><span class="chip strong">5 of 5 done</span></div>
           <p style="margin:6px 0 12px">Tiling a texture 2x2 makes seams obvious. Ideogram tiling kept stalling, so all five came from z-image turbo tiling, with patina normal maps.</p>
@@ -926,6 +1012,16 @@
         <p>Footsteps on grass, grass pull, pickup whoosh, fruit crunch, egg crack, hatch chime, happy chirp, hungry
         whine, phone ping, and a looping island ambience: 15 files, since some sounds have variants. All are imported into Unreal; pickup, crunch, chirp and whine already play in the greybox.</p>
       </div>
+    </section>
+
+    <!-- ── SECTION: models ── -->
+    <section class="block" id="models">
+      <div class="section-head"><h2>Models we've used</h2><span class="hint">every generation model so far (all run on fal), plus the agents</span></div>
+      <div class="glass prose" style="margin-bottom:14px">
+        <p>Every generated asset keeps a manifest with the exact endpoint, prompt and references, so this list comes straight from those files.
+        Some models won a bake-off and became the default; others were tried and dropped, and they're listed too.</p>
+      </div>
+      <div class="grid" id="modelgroups"></div>
     </section>
 
     <!-- ── SECTION: the creature ── -->
@@ -1272,6 +1368,13 @@ xcrun metal --version</pre>
       $('playtestrows').innerHTML = (S.playtest || []).map(function (p) {
         return '<tr><td><strong>' + esc(p.what) + '</strong></td><td class="desc">' + esc(p.fix) + '</td><td><span class="chip ' +
           (p.status === 'done' ? 'strong' : 'dim') + '">' + esc(p.status) + '</span></td></tr>';
+      }).join('');
+
+      $('modelgroups').innerHTML = (S.models || []).map(function (g) {
+        return '<div class="glass prose models"><h3>' + esc(g.group) + '</h3><ul>' + (g.items || []).map(function (m) {
+          return '<li>' + (m[2] === 'plain' ? '<strong>' + esc(m[0]) + '</strong>' : '<code>' + esc(m[0]) + '</code>') +
+            '<span class="note">' + esc(m[1]) + '</span></li>';
+        }).join('') + '</ul></div>';
       }).join('');
 
       $('nextlist').innerHTML = (S.next || []).map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('');

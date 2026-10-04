@@ -2,19 +2,91 @@
    To update the site, edit this file (and add images to media/), then publish.
    Keep everything a plain JS object (no fetch, works from file://). See UPDATING.md. */
 window.SITE = {
-  updated: "2026-09-30",
+  updated: "2026-10-03",
 
   /* Headline numbers in the stat row. */
   stats: [
-    { label: "Tests", value: "70 + 71", delta: "sim ctest + UE automation, all passing" },
-    { label: "End-to-end", value: "87 / 87", delta: "checks in the self-driving two-island run" },
-    { label: "GPU frame", value: "~8 ms", delta: "at 1080p after two art waves" },
+    { label: "Tests", value: "90 + 103", delta: "sim ctest + UE automation, all passing" },
+    { label: "End-to-end", value: "98 / 98", delta: "checks in the self-driving two-island run" },
+    { label: "Creature bodies", value: "1 + 8", delta: "the baby plus 8 grown-up bodies" },
     { label: "Islands", value: "2 + hub", delta: "plus the race meadow" },
-    { label: "Audio files", value: "76", delta: "42 new footstep sounds on fal" }
+    { label: "Save schema", value: "v6", delta: "every old save still migrates forward" }
   ],
 
   /* Dev log: newest first. Copy an entry, change the date/title/items. */
   devlog: [
+    {
+      date: "2026-10-03", time: "20:05",
+      title: "A trailer, in progress",
+      items: [
+        "Work started on a 30-second trailer. It's cut in HyperFrames, which builds video from HTML, using in-game shots that a console command flies and records on its own, offscreen.",
+        "The first narration was the mentor, Prime Rafi. Then we tried a movie-trailer announcer on two engines, Gemini 3.8 Flash TTS and MiniMax Speech 2.8 HD. Kenneth turned both down.",
+        "So we cast it properly. An agent built a casting page: round one had 25 voices of different ages and genders, made with ElevenLabs v3, Gemini TTS and MiniMax (including MiniMax voice design).",
+        "Kenneth then wrote a short first-person script for the player character: a new apprentice caretaker who arrives to find the Prime gone and the island a mess. Round two had 11 young, gender-fluid voices read it, and Kenneth picked one.",
+        "The cut isn't finished and isn't public yet. Kenneth is still reviewing the timing and the mix."
+      ]
+    },
+    {
+      date: "2026-10-03", time: "13:05",
+      title: "Creatures roam the island; grass grows back",
+      items: [
+        "Kenneth's next playtest note: the creatures “just stay right where the player lands”. Arrivals now scatter across Broadmeadow, wander 4 to 25 m at a time toward points of interest, and meet up at social spots. Branch piles are spread out too.",
+        "Cleared grass now regrows, up to 3 tufts per island per day, so fiber is renewable. Clearing a tuft gives 1 fiber, or 2 with a sickle.",
+        "Verified on main: 90 of 90 sim tests, 103 of 103 Unreal tests, 98 of 98 end-to-end checks. Kenneth hasn't played these fixes yet."
+      ]
+    },
+    {
+      date: "2026-10-03", time: "08:40",
+      title: "Playtest fixes: frozen creatures, sunk trees and bridges",
+      items: [
+        "Creatures stood frozen in a row. Their “socialize” behaviour had no movement once they arrived, and they spawn closer together than the social distance, so they arrived instantly. Now they sway and then stroll together.",
+        "Planted trees sat about 2 m underground and the bridges sat in the water. Generated meshes have their pivot in the middle, and the game placed them by that middle point. New grounding helpers seat trees on the ground and bridges on their banks.",
+        "Still open: one river crossing is too wide for its bridge, and young saplings hide in the tall grass."
+      ]
+    },
+    {
+      date: "2026-10-03", time: "07:45",
+      title: "Wave 11 Phase A: crafting",
+      items: [
+        "Kenneth's direction for the next big wave: make it like the old game Creatures, “but like, amped up to eleven”. The plan has four phases: tools, then decorating, then creatures doing jobs when you ask, then creatures that pass ideas to each other and form crews.",
+        "Phase A is merged. Tools come in 4 tiers (Timber, Stone, Brass and a Solarpunk tier) as an axe, pick, hammer and sickle, with no durability to manage.",
+        "You can chop wild trees (pine, birch, oak) and fruit trees. The Prime calls to warn you about the fruit trees, up to three times. Rocks can be mined, and soft rocks give stone by hand, so you can make your first workbench and pick before you own any tools. Grass gives fiber.",
+        "There's a workbench menu, the held tool shows in your hand, and the phone lists your materials. The save moved to schema v6, with a migration tested on a real v5 save.",
+        "The meshes and text are placeholders for now. The concept sheet below is waiting for Kenneth's answers: is the Stone tier too weak, which tree first, the birch colour, and crystals or plain seams on the rocks."
+      ]
+    },
+    {
+      date: "2026-10-02", time: "15:35",
+      title: "Wave 10: creatures grow up",
+      items: [
+        "The baby now grows into real bodies: an adolescent (85 cm) and an adult (120 cm) for each of four lines, Leaf, Fin, Wing and Stone. Before this, grown-ups were the baby scaled up.",
+        "Concepts came from nano-banana-pro, guided by the style guide. Kenneth approved them, and all 8 went to Tripo H3.1 multiview, 8 of 8 usable on the first try.",
+        "Every body was fitted to the baby's skeleton, so all the existing animations play on them. Tails, ears and wings sway on their own. The Stone bodies came out with ears fused to their forearms; they were cut apart and re-rigged.",
+        "New behaviour: adults are too big to carry, but you can give them a shove. Press F to ask a creature to follow you, even across islands. The first time a creature grows up, there's a small moment and a call from the Prime.",
+        "Kenneth on the in-engine sheet: “these look great”. He hasn't tried them in play yet."
+      ]
+    },
+    {
+      date: "2026-10-02", time: "12:35",
+      title: "Caretaker skin weights v2 and wood that never runs out",
+      items: [
+        "Kenneth circled the spots where the caretaker's body bent badly in motion. v2 fixes them: the spine no longer curves into an S at idle, the thighs and shoulders deform cleanly, the wrist seam is welded and the sleeve cuff follows the forearm. Shoulders still stretch a little with arms overhead. Waiting for his review.",
+        "Wood can't run out any more. Up to 3 cleared branch piles regrow per island per day, and harvested trees drop a branch."
+      ]
+    },
+    {
+      date: "2026-10-02", time: "09:20",
+      title: "Wave 9: the caretaker is real",
+      items: [
+        "The player was the grey template mannequin until now. Agents drew 8 caretaker concepts, then redrew them in 10 shape styles. Kenneth picked the Tall Elegant style and the Gadget Tech character.",
+        "A locked 5-view sheet went to five 3D generators. Tripo H3.1 multiview won. Every generator fused the fingers, so the template's 5-finger hands were grafted on. The model is skinned to a fitted copy of Unreal's mannequin skeleton, so the template's walking and running work on it.",
+        "17 extra animations were keyed in Blender: carrying an egg or a creature, picking up, putting down, tossing, feeding, petting, waving, working, the slingshot tuck and the landing. The first build stood in an A-pose at idle, from a blend weight that hit zero; that's fixed.",
+        "A title screen: a slow drift over Kettle Island, the logo and title music (agent picks; no human has heard the music yet), then Continue, New Game, Settings, Controls, Credits and Quit.",
+        "Babies now have 8 coats and 8 markings, read from their genes and passed on to their children, with no save change.",
+        "Grass push fix: each blade now bends at its root and keeps its length. That also removed a flat white shape that had shown up under the player in the grass.",
+        "The model, animations, title screen and coats are agent work waiting for Kenneth's review."
+      ]
+    },
     {
       date: "2026-09-30", time: "11:05",
       title: "Wave 8: a second polish pass",
@@ -323,12 +395,65 @@ window.SITE = {
 
   /* What's next (short, plain). */
   next: [
-    "Kenneth is playtesting wave 8 and reviewing the new look.",
-    "Grass and path polish: the race track seen from above is a bit neon and blotchy, and a few glint slivers on the water need calming.",
-    "Trees closer to the concept (lobed canopies rather than round ones) and warmer hub walls.",
-    "A real caretaker character: it is still the grey template mannequin.",
-    "Listen to the footsteps and the music, and review the waiting fal art.",
-    "More islands behind the hub's locked doors."
+    "Kenneth plays the merged build: crafting, roaming creatures, the grounding fixes and the grown-up bodies.",
+    "Crafting Gate 1: his answers on the tool and tree concepts, then real 3D tools and trees, and chop, mine and hammer animations for the caretaker.",
+    "Crafting Phases B to D: decorating, creatures doing jobs when you ask, then creatures that share ideas and form crews.",
+    "Caretaker polish: the hand seam, petting and feeding that aim at the creature, a real arc for the toss.",
+    "Broadmeadow's paths, saplings hidden by grass, and a pause menu.",
+    "Finish the trailer.",
+    "Later: a solarpunk theme for the world, which the Tier 4 tools start."
+  ],
+
+  /* Every generation model and agent used so far, grouped by job (from the asset provenance files). */
+  models: [
+    { group: "Images and concepts", items: [
+      ["fal-ai/nano-banana-pro/edit", "The workhorse, about 400 calls: style anchors, creature, caretaker, egg and prop concepts, turnarounds, UI art"],
+      ["fal-ai/qwen-image-edit-2511-multiple-angles", "Multi-view sheets that feed image-to-3D"],
+      ["fal-ai/gpt-image-1.5", "UI and icons"],
+      ["fal-ai/gpt-image-2", "UI and icons"],
+      ["fal-ai/recraft/v4/pro/text-to-image", "UI and icons"],
+      ["fal-ai/ideogram/v3/generate-transparent", "Icons and the title logo, with a transparent background"],
+      ["fal-ai/recraft/upscale/crisp", "UI upscales"],
+      ["pixelcut/background-removal", "Background removal"],
+      ["fal-ai/birefnet/v2", "Background removal"],
+      ["fal-ai/bria/background/remove", "Background removal"]
+    ]},
+    { group: "Textures and materials", items: [
+      ["fal-ai/z-image/turbo/tiling", "All the tiling ground textures. ideogram/v4/tiling was tried first and dropped because it kept stalling"],
+      ["fal-ai/patina", "PBR material maps (normals and more)"]
+    ]},
+    { group: "3D", items: [
+      ["meshy/v7.1/image-to-3d + multi-image-to-3d", "Most props, the eggs and the early creatures"],
+      ["fal-ai/meshy/rigging/multi-animation", "The early creature auto-rig. Joints landed badly on round bodies"],
+      ["tripo3d/h3.1/multiview-to-3d", "Won the bake-off: the caretaker and all 8 creature stage bodies"],
+      ["tripo3d/h3.1/image-to-3d", "Props"],
+      ["tripo3d/p2/image-to-3d", "Props"],
+      ["fal-ai/hunyuan3d-v3/image-to-3d", "Props"],
+      ["fal-ai/hyper3d/rodin/v2.5", "Caretaker bake-off entrant, not used"],
+      ["hitem3d/hi3d/v3.0", "Caretaker bake-off entrant, not used"],
+      ["Blender, headless and procedural", "Terrain, grass and skin weights. No generation model", "plain"]
+    ]},
+    { group: "Music", items: [
+      ["google/lyria-3.5", "Island, race and ceremony candidates"],
+      ["elevenlabs/music/v2.5", "Island, race and ceremony candidates"],
+      ["fal-ai/minimax-music/v2.6", "The title track"]
+    ]},
+    { group: "Sound effects", items: [
+      ["fal-ai/elevenlabs/sound-effects/v2", "Most in-game sound effects"],
+      ["mirelo-ai/sfx1.6/text-to-audio", "Ambience loops and extra candidates"]
+    ]},
+    { group: "Voice (trailer)", items: [
+      ["fal-ai/elevenlabs/tts/eleven-v3", "Mentor narration and casting voices, including Kenneth's pick"],
+      ["google/gemini-3.8-flash-tts", "Announcer attempt and casting voices"],
+      ["fal-ai/minimax/speech-2.8-hd", "Announcer attempt and casting voices"],
+      ["fal-ai/minimax/voice-design", "Custom-designed casting voices"]
+    ]},
+    { group: "Agents that build it", items: [
+      ["Claude Opus 5.5", "Orchestrator: plans, Unreal, 3D and trailer work, and every acceptance check", "plain"],
+      ["Claude Sonnet 5.5", "Git commits and pushes", "plain"],
+      ["Claude Fable 5.1", "Narrative and UI copy", "plain"],
+      ["GPT-6 Astra and GPT-6 Sol (Codex)", "The deterministic simulation and other clear-spec code", "plain"]
+    ]}
   ],
 
   /* First-playtest notes (Kenneth's flags). status: "in progress" | "done". */
