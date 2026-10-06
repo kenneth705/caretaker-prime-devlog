@@ -2,19 +2,70 @@
    To update the site, edit this file (and add images to media/), then publish.
    Keep everything a plain JS object (no fetch, works from file://). See UPDATING.md. */
 window.SITE = {
-  updated: "2026-10-03",
+  updated: "2026-10-05",
 
   /* Headline numbers in the stat row. */
   stats: [
-    { label: "Tests", value: "90 + 103", delta: "sim ctest + UE automation, all passing" },
-    { label: "End-to-end", value: "98 / 98", delta: "checks in the self-driving two-island run" },
+    { label: "Tests", value: "128 + 136", delta: "sim ctest + UE automation, all passing" },
+    { label: "End-to-end", value: "156 / 156", delta: "checks in the self-driving two-island run" },
     { label: "Creature bodies", value: "1 + 8", delta: "the baby plus 8 grown-up bodies" },
     { label: "Islands", value: "2 + hub", delta: "plus the race meadow" },
-    { label: "Save schema", value: "v6", delta: "every old save still migrates forward" }
+    { label: "Save schema", value: "v10", delta: "every old save still migrates forward" }
   ],
 
   /* Dev log: newest first. Copy an entry, change the date/title/items. */
   devlog: [
+    {
+      date: "2026-10-05", time: "21:20",
+      title: "Playtest fix: stuck holding an egg",
+      items: [
+        "Kenneth got stuck. Kettle Island was full, so the incubator wouldn't take the egg he was carrying, there was no way to put it down, and once he carried it to Broadmeadow he couldn't travel home: the game counted the egg as a resident that needed room.",
+        "Now an egg can be set down anywhere with G, and it stays put through saving and travel. Eggs never block a trip, because an egg isn't a resident until it hatches.",
+        "Every refusal now says why and how to get unstuck, for example \u201cPut Pip down (G) to travel alone\u201d. A follower with no room on the other island stays behind instead of blocking you.",
+        "Still open: a set-down egg can hide in tall grass. Verified: 128 of 128 sim tests, 136 of 136 Unreal tests, 156 of 156 end-to-end checks."
+      ]
+    },
+    {
+      date: "2026-10-05", time: "11:40",
+      title: "Wave 13: fallen logs, tool hints and a dev panel",
+      items: [
+        "Fallen logs can be chopped with any axe for a few logs, and they come back after three days. The first time you need a tool, the Prime tells you how to make it, then reminds you once to press 1 to hold it.",
+        "A dev panel (Ctrl+Cmd+D) for playtesting: give items and tools, change the sky and season, fast-forward time, repair or break buildings, hatch and age creatures, teleport, and save or reload.",
+        "The save is now schema v10, with each step since v6 migrated and tested on a real older save."
+      ]
+    },
+    {
+      date: "2026-10-04", time: "23:30",
+      title: "Wave 13: the workshop is home base",
+      items: [
+        "Kenneth played wave 12 and asked for a home base, storage, a way to get rid of extra stuff, and fixes to the big tree and the ground.",
+        "The workshop ruin moved to Kettle Island, the starting island. The workbench is there from day one, with the Outpost Locker (12 slots) beside it. Mending the workshop with a hammer opens the Brass and Solarpunk tool tiers and grows the locker to 24 slots.",
+        "Storage Chests are craftable (10 logs and 4 fiber, 24 slots), and tools can be stored too. If your axe is in the locker, the prompt tells you so.",
+        "Surplus goes in the Supply Crate at the landing beach. It ships overnight to the company that sent you, which pays in Supply Vouchers, shown with a V-over-S sign that reads like a dollar. Kenneth still has to pick the final glyph.",
+        "A trash can in the bag, with one-step undo, and tools ask before they go. Story Parts can't be thrown away.",
+        "The big tree on Kettle had see-through holes in its trunk; the mesh is now watertight. Paths and beaches got soft, wandering edges, the grass varies in height and colour, and it no longer grows through buildings or in hard circles around trees."
+      ]
+    },
+    {
+      date: "2026-10-04", time: "19:45",
+      title: "Wave 12: the outpost buildings",
+      items: [
+        "Kenneth wanted a solarpunk feel and real buildings with a purpose: \u201cthe cottage, maybe a seed recoverer (broke and late game item like a goal) Maybe a boat dock with boat tools for getting between islands. Workshop for tool upgrades and bigger project\u201d. He picked one concept for each.",
+        "All four were built with Tripo H3.1 multiview, each in a broken and a repaired version with the same footprint, and placed on Broadmeadow. Repairing the dock and the seed recoverer comes in a later wave."
+      ]
+    },
+    {
+      date: "2026-10-04", time: "14:15",
+      title: "Wave 12: gathering feels good",
+      items: [
+        "Kenneth's playtest asks: a scythe for fiber, a Stardew-style tool bar and bag, a busted house to fix, rocks that make sense to gather, and animations for chopping, mining, hammering and scything.",
+        "Two kinds of wood: logs from any tree, and hardwood from big trees and old stumps, which needs a Stone Axe. Small rocks are loose stones you pick up by hand; big rocks need a pick. The scythe mows a swath of meadow, and grass grows back over five days.",
+        "A 12-slot hotbar (keys 1 to 0, minus and equals, or the wheel) and a bag of 12, 24 or 36 slots, with 38 new icons in the style Kenneth picked. The selected tool decides what E does.",
+        "The Broadmeadow bunkhouse starts ruined and can be mended with a hammer, with room for four creatures.",
+        "The story changed: nobody knows what happened to the last Prime. The outpost just went dark six weeks ago; everyone hoped it was a bad relay, and it wasn't. Kenneth: \u201csix weeks sounds good\u201d.",
+        "New animations for the caretaker (draw tool, chop, mine, hammer, scythe) and the creatures (chop, hammer, sweep, carry). These are agent work waiting for Kenneth's review."
+      ]
+    },
     {
       date: "2026-10-03", time: "20:05",
       title: "A trailer, in progress",
@@ -395,13 +446,12 @@ window.SITE = {
 
   /* What's next (short, plain). */
   next: [
-    "Kenneth plays the merged build: crafting, roaming creatures, the grounding fixes and the grown-up bodies.",
-    "Crafting Gate 1: his answers on the tool and tree concepts, then real 3D tools and trees, and chop, mine and hammer animations for the caretaker.",
+    "Kenneth plays waves 12 and 13 and the egg fix, and picks the voucher glyph.",
+    "An egg set down in tall grass is hard to see; it needs a marker or a clearing.",
+    "Real 3D for the Storage Chest and the Outpost Locker, which still use placeholder looks.",
+    "Repairing the boat dock and the seed recoverer, and something to spend Supply Vouchers on.",
     "Crafting Phases B to D: decorating, creatures doing jobs when you ask, then creatures that share ideas and form crews.",
-    "Caretaker polish: the hand seam, petting and feeding that aim at the creature, a real arc for the toss.",
-    "Broadmeadow's paths, saplings hidden by grass, and a pause menu.",
-    "Finish the trailer.",
-    "Later: a solarpunk theme for the world, which the Tier 4 tools start."
+    "Caretaker polish (the hand seam, aiming the pet and feed, the toss arc), a pause menu, and finishing the trailer."
   ],
 
   /* Every generation model and agent used so far, grouped by job (from the asset provenance files). */

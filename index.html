@@ -508,7 +508,7 @@
             Built in Unreal Engine 5.8 on a Mac by a team of AI agents directed by one person, with every art and
             sound asset generated on fal. This page documents how, including what didn't work.
           </p>
-          <p class="meta-line meta">Work in progress · two playable islands, a real caretaker, creatures that grow up, the start of crafting · updated as we go</p>
+          <p class="meta-line meta">Work in progress · two playable islands, a real caretaker, creatures that grow up, crafting, gathering and a home base · updated as we go</p>
         </div>
         <figure class="glass glass-raised hero-art">
           <img class="zoom" src="media/anchor_d_beach.webp" alt="Cel-shaded concept of a lavender crystal-rabbit adult creature holding a fruit on a beach beside a rope-bound pier" />
@@ -518,13 +518,100 @@
     </div>
 
     <nav class="toc" aria-label="Sections">
-      <a href="#day5">Days five to seven</a><a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
+      <a href="#day8">Days eight and nine</a><a href="#day5">Days five to seven</a><a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
       <a href="#pipeline">fal pipeline</a><a href="#models">Models we use</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
       <a href="#sim">Simulation</a><a href="#playtest">Playtest</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
     </nav>
 
     <section class="block">
       <div class="stats" id="stats"></div>
+    </section>
+
+    <!-- ── SECTION: days eight and nine (2026-10-04 to 10-05) ── -->
+    <section class="block" id="day8">
+      <div class="section-head"><h2>Days eight and nine: gathering, an outpost, a home base</h2><span class="hint">2026-10-04 to 10-05 · waves 12 and 13, one playtest fix</span></div>
+      <div class="glass prose">
+        <p>Two waves, both straight from Kenneth's playtests. <strong>Wave 12</strong> made gathering feel good: two kinds of wood, stones you can pick up,
+        a scythe, a Stardew-style hotbar and bag, work animations, and run-down outpost buildings you can repair. <strong>Wave 13</strong> gave the caretaker
+        a home base on the starting island: a workshop with a locker, craftable chests, a crate that ships surplus to the company for Supply Vouchers,
+        a trash can, and a polish pass on the ground and the big tree. Then one more playtest fix: you could get stuck holding an egg.</p>
+        <p style="margin-top:10px">Honest status: Kenneth picked the building concepts, the icon style and the new story, but the animations, the home base,
+        the voucher sign and the ground pass are agent work waiting for his next play.</p>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 12: gathering feels good</h2><span class="hint">Kenneth's six playtest asks</span></div>
+      <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w12_gathering.webp" alt="Four in-game frames: the caretaker mid-chop on the beach, a mown swath in the meadow after a scythe swing, chopping a huge hardwood oak with a Stone Axe, and the open bag with 17 of 36 slots used" /></div>
+        <div class="body"><div class="title-row"><h3>Wood, hardwood, stones, fiber</h3><span class="chip dim">pending review</span></div>
+        <p>Logs come from any tree; hardwood comes from big trees and old stumps and needs a Stone Axe. Small rocks are loose stones you pick up by hand. The scythe mows a whole swath of meadow for fiber, and the grass grows back over five days.
+        The hotbar works like Stardew Valley's: the selected tool decides what E does, and the bag grows from 12 to 24 to 36 slots.</p></div></div>
+      <div class="two" style="margin-top:18px">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w12_icons.webp" alt="A sheet of 38 painted item icons: branch, seed, part, log, stone, fiber, plank, rope, hardwood, fruits, fish, steak, six crystals, four tiers each of axe, pick, hammer and scythe, and two bags" /></div>
+          <div class="body"><div class="title-row"><h3>38 hotbar icons</h3><span class="chip strong">Kenneth picked the style</span></div>
+          <p>Every item and tool tier, drawn with nano-banana-pro in the style Kenneth chose from three tests, shown on dark and light slots.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w12_work_anims.webp" alt="Twelve frames of the caretaker on a beach drawing a tool, chopping, mining, hammering and swinging a scythe" /></div>
+          <div class="body"><div class="title-row"><h3>Work animations</h3><span class="chip dim">pending review</span></div>
+          <p>Keyed in Blender: drawing a tool, chopping, mining, hammering and scything for the caretaker, plus chop, hammer, sweep and carry for the creatures.</p></div></div>
+      </div>
+      <div class="glass card" style="margin-top:18px">
+        <div class="media wide"><img class="zoom" loading="lazy" src="media/w12_outpost_meshes.webp" alt="A grid of four solarpunk outpost buildings, each broken and repaired from front and back: a turf-roofed cottage, a glass-domed seed recoverer, a workshop with solar panels and a windmill, and a boat dock on stilts; below, the same buildings placed on Broadmeadow" /></div>
+        <div class="body">
+          <div class="title-row"><h3>The outpost buildings</h3><span class="chip strong">Kenneth picked</span></div>
+          <p>Kenneth: &ldquo;we want a solar punk vibe on this&rdquo;, with a cottage, a seed recoverer as a late-game goal, a boat dock for getting between islands, and a workshop for tool upgrades.
+          He picked a concept for each, and Tripo H3.1 multiview built all four in a broken and a repaired version with the same footprint. The bottom rows show them on Broadmeadow.
+          The bunkhouse can already be mended with a hammer, with room for four creatures.</p>
+          <p style="margin-top:8px">The story changed with them: nobody knows what happened to the last Prime. The outpost went dark six weeks ago, and everyone hoped it was just a bad relay.</p>
+        </div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 13: the workshop is home base</h2><span class="hint">from Kenneth's in-play notes · pending review</span></div>
+      <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w13_workshop.webp" alt="The workshop on Kettle Island, broken on the left and mended on the right with solar panels and a turning windmill; a workbench and a pale green locker stand in front" /></div>
+        <div class="body"><h3>A workshop on the starting island</h3>
+        <p>The workshop moved to Kettle Island, with the workbench and the Outpost Locker usable from day one. Mending it with a hammer opens the Brass and Solarpunk tool tiers and doubles the locker to 24 slots.</p></div></div>
+      <div class="two" style="margin-top:18px">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w13_chest.webp" alt="The caretaker beside a placed wooden storage chest in the grass near the workshop" /></div>
+          <div class="body"><h3>Storage Chests</h3>
+          <p>Craft one at the workbench from 10 logs and 4 fiber and place it anywhere: 24 slots, with a quick-stack button. Tools can be stored too, and if your axe is in the locker, the prompt says so.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w13_trash.webp" alt="Four views of the bag: a trash can beside the slots, a stack of logs held over the can, an Undo button after trashing, and a confirm card before trashing the Stone Axe" /></div>
+          <div class="body"><h3>A trash can, with undo</h3>
+          <p>Drop anything you don't want in the can, and take it back until you close the bag. Tools ask first, and story Parts can't be thrown away.</p></div></div>
+      </div>
+      <div class="glass card" style="margin-top:18px">
+        <div class="media wide"><img class="zoom" loading="lazy" src="media/w13_vouchers.webp" alt="Supply Vouchers in game: the bag header showing 53, a morning toast reading Shipped overnight: 12 Log, 2 Rope, 7 Sweet Fruit, plus 53, the phone's Requests card with the voucher wallet, and the Supply Crate screen with a shipping manifest and estimated payout" /></div>
+        <div class="body">
+          <div class="title-row"><h3>Ship surplus for Supply Vouchers</h3><span class="chip dim">glyph awaiting Kenneth</span></div>
+          <p>Put what you don't need in the Supply Crate at the landing beach. It ships overnight to the company that sent you, and the next morning you're paid in Supply Vouchers, the same wallet the daily requests pay into.
+          Kenneth didn't want &ldquo;tickets&rdquo;, so the currency got its own sign: a V over an S that reads like a dollar. Six versions are below; he hasn't picked one yet.</p>
+        </div>
+        <div class="media wide" style="margin-top:6px"><img class="zoom" loading="lazy" src="media/w13_glyphs.webp" alt="Six candidate voucher signs combining a V and an S, each shown at four text sizes" /></div>
+      </div>
+      <div class="two" style="margin-top:18px">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w13_ground.webp" alt="Before and after pairs: on the right, path and beach edges are soft and wandering instead of hard lines, and the meadow grass varies in height and colour" /></div>
+          <div class="body"><h3>Ground polish</h3>
+          <p>Before on the left, after on the right. Kenneth found the paths too sharp and the beach edge too clean. Now edges wander and blend, the grass varies in height and colour with drier blades by the sand, it stays out of buildings, and it thins softly under trees instead of in hard circles. (The shed in the third pair is the old workshop ruin, which moved to Kettle.)</p></div></div>
+        <div class="stack">
+          <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w13_big_tree.webp" alt="The big oak on Kettle Island from four angles: before, the trunk is split with gaps you can see the sky through; after, it is one solid trunk" /></div>
+            <div class="body"><h3>The big tree, without holes</h3>
+            <p>The starting island's big oak had see-through gaps in its trunk. The mesh is now watertight from every side.</p></div></div>
+          <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w13_dev_panel.webp" alt="The dev panel open beside the caretaker: tabs for Items, World, Build, Creatures, Travel and Save, with material and tool buttons and a voucher balance" /></div>
+            <div class="body"><h3>A dev panel for playtesting</h3>
+            <p>Ctrl+Cmd+D opens six tabs: give items and tools, set the sky and season, skip time, repair or break buildings, hatch and age creatures, teleport, and save or reload.</p></div></div>
+        </div>
+      </div>
+      <div class="glass card" style="margin-top:18px">
+        <div class="media wide"><img class="zoom" loading="lazy" src="media/w13_logs.webp" alt="Six frames at a fallen log in tall grass: the Prime's hint to craft an axe, a hint to press 1, the axe selected, mid-swing, the log split with three logs gained, and a close-up of the cut faces and wedges" /></div>
+        <div class="body"><h3>Fallen logs and one-time hints</h3>
+        <p>Fallen logs split for a few logs with any axe and come back after three days. The first time you need a tool, the Prime tells you how to make it, and you get one reminder to press 1 to hold it.</p></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Playtest fix: stuck holding an egg</h2><span class="hint">2026-10-05</span></div>
+      <div class="glass card">
+        <div class="media wide"><img class="zoom" loading="lazy" src="media/egg_set_down.webp" alt="The caretaker in tall grass at dusk, with the messages You set the egg down. It will wait here; press E beside it to pick it up again" /></div>
+        <div class="body">
+          <div class="title-row"><h3>Set an egg down anywhere</h3><span class="chip dim">one thing still open</span></div>
+          <p>With Kettle Island full, the incubator refused Kenneth's egg, there was no way to put it down, and carrying it to Broadmeadow stranded him there. Now G sets an egg down anywhere and it waits through saves and trips;
+          eggs never block travel, since an egg isn't a resident until it hatches; and every refusal says how to get unstuck. Still open, and visible here: a set-down egg can disappear in tall grass.</p>
+        </div>
+      </div>
     </section>
 
     <!-- ── SECTION: days five to seven (2026-10-01 to 10-03) ── -->
