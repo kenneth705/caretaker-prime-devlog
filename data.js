@@ -2,19 +2,51 @@
    To update the site, edit this file (and add images to media/), then publish.
    Keep everything a plain JS object (no fetch, works from file://). See UPDATING.md. */
 window.SITE = {
-  updated: "2026-10-05",
+  updated: "2026-10-09",
 
   /* Headline numbers in the stat row. */
   stats: [
-    { label: "Tests", value: "128 + 136", delta: "sim ctest + UE automation, all passing" },
-    { label: "End-to-end", value: "156 / 156", delta: "checks in the self-driving two-island run" },
-    { label: "Creature bodies", value: "1 + 8", delta: "the baby plus 8 grown-up bodies" },
+    { label: "Tests", value: "147 + 149", delta: "sim ctest + UE automation, all passing" },
+    { label: "End-to-end", value: "185 / 185", delta: "checks in the self-driving two-island run" },
+    { label: "Bugs & fish", value: "52", delta: "24 bugs, 24 fish and 4 rain or snow specials" },
     { label: "Islands", value: "2 + hub", delta: "plus the race meadow" },
-    { label: "Save schema", value: "v10", delta: "every old save still migrates forward" }
+    { label: "Save schema", value: "v11", delta: "every old save still migrates forward" }
   ],
 
   /* Dev log: newest first. Copy an entry, change the date/title/items. */
   devlog: [
+    {
+      date: "2026-10-09", time: "14:55",
+      title: "Wave 14: creature fixes and a first-play crash",
+      items: [
+        "Kenneth reported grown creatures standing with their arms straight out, and creatures getting stuck. The arms weren't a T-pose: the shared animation clips hold the arms about 45 degrees out, which looks fine on a round baby but wrong on the long-armed grown bodies. They now droop by 24 degrees, with a watchdog so a creature never falls back to its bind pose.",
+        "Stuck creatures: a creature now only picks a goal it can reach all the way, a stuck detector steps it aside and gives up on that goal, and as a last resort it snaps back onto walkable ground. The bridge deck on Broadmeadow now reaches dry land on both sides.",
+        "In Kenneth's first play of wave 14 the game closed on him: bugs and fish leaving the world while the game was still counting them tripped a safety check. That was fixed the same day.",
+        "Verified before the crash fix: 147 of 147 sim tests, 149 of 149 Unreal tests, 185 of 185 end-to-end checks, and a 48-hour soak with no creature stuck. The tests haven't been re-run since the crash fix."
+      ]
+    },
+    {
+      date: "2026-10-09", time: "01:15",
+      title: "Wave 14: bugs and fish",
+      items: [
+        "Kenneth asked for Animal Crossing-style bugs and fish that change with the seasons and with day and night: ten of each a season, five by day and five by night, special ones in rain and snow, and a fishing rod with its own animations.",
+        "He approved a roster of 52: 24 bugs, 24 fish and 4 weather specials (Puddle Strider and Ancient Lobefin in the rain, Snowdrift Moth and Glacier Pike in the snow). Seasons follow the real calendar, and day or night follows the sky on screen.",
+        "Bugs: hold the button to sneak up, then swing the net. Rarer bugs startle sooner. Fish are shadows in the water: cast, let the fish nibble, and press when it bites. The net and the rod each come in four tiers, and better tiers give more reach or a longer bite window.",
+        "Every catch ends with the caretaker holding it up to the camera with a little card. Then you can ship it, gift it or feed it to a creature, let it go, or show it off in a craftable aquarium or terrarium. The phone album has a Critterpedia that fills in as you catch.",
+        "Kettle Island got a pond, and Broadmeadow got its own Supply Crate.",
+        "Art pipeline: nano-banana-pro side views, pixelcut background removal, then Tripo H3.1 image-to-3D for all 52 critters, the nets, the rods and the tanks. The first rods read as logs in the game, so they were rebuilt slimmer. The art and the new animations are waiting for Kenneth's review, and the catch timings are first guesses."
+      ]
+    },
+    {
+      date: "2026-10-08", time: "21:55",
+      title: "An HD-2D camera",
+      items: [
+        "An experiment on a side branch: a camera in the style of Octopath Traveler's HD-2D, with a low angle, a long lens and a tilt-shift blur so the island looks like a miniature diorama.",
+        "Four modes: Standard, HD-2D, HD-2D Strong and HD-2D Low. The player picks one in the phone's Settings. In Low mode, anything that would block your view of the caretaker hides itself and comes back when you've passed.",
+        "Kenneth: \u201cI kind of like the strong one, but I also want one that's actually a lot more like lower angled\u2026 closer to what we have in Octopath\u201d. So the dev panel got a live camera tuner, and he tuned Low himself and played it for several sessions.",
+        "The branch is now merged, and HD-2D Low with Kenneth's tuning is the default camera. Still rough: hidden objects pop instead of fading, and tall grass can hide the caretaker's legs."
+      ]
+    },
     {
       date: "2026-10-05", time: "21:20",
       title: "Playtest fix: stuck holding an egg",
@@ -446,25 +478,25 @@ window.SITE = {
 
   /* What's next (short, plain). */
   next: [
-    "Kenneth plays waves 12 and 13 and the egg fix, and picks the voucher glyph.",
-    "An egg set down in tall grass is hard to see; it needs a marker or a clearing.",
-    "Real 3D for the Storage Chest and the Outpost Locker, which still use placeholder looks.",
-    "Repairing the boat dock and the seed recoverer, and something to spend Supply Vouchers on.",
+    "Kenneth plays wave 14 and reviews the critter models, icons, rods, tank glass and the new animations, plus a few taste calls: bug size, night glow, and the creatures' arm droop.",
+    "A hands-on pass on catch timings, which are still first guesses.",
+    "Ground bugs hide in tall grass, and the Critterpedia assumes the Northern hemisphere.",
+    "Something to spend Supply Vouchers on, and repairing the boat dock and the seed recoverer.",
     "Crafting Phases B to D: decorating, creatures doing jobs when you ask, then creatures that share ideas and form crews.",
-    "Caretaker polish (the hand seam, aiming the pet and feed, the toss arc), a pause menu, and finishing the trailer."
+    "A pause menu, caretaker polish, and finishing the trailer."
   ],
 
   /* Every generation model and agent used so far, grouped by job (from the asset provenance files). */
   models: [
     { group: "Images and concepts", items: [
-      ["fal-ai/nano-banana-pro/edit", "The workhorse, about 400 calls: style anchors, creature, caretaker, egg and prop concepts, turnarounds, UI art"],
+      ["fal-ai/nano-banana-pro/edit", "The workhorse, over 400 calls: style anchors, creature, caretaker, egg, prop and critter concepts, turnarounds, UI art"],
       ["fal-ai/qwen-image-edit-2511-multiple-angles", "Multi-view sheets that feed image-to-3D"],
       ["fal-ai/gpt-image-1.5", "UI and icons"],
       ["fal-ai/gpt-image-2", "UI and icons"],
       ["fal-ai/recraft/v4/pro/text-to-image", "UI and icons"],
       ["fal-ai/ideogram/v3/generate-transparent", "Icons and the title logo, with a transparent background"],
       ["fal-ai/recraft/upscale/crisp", "UI upscales"],
-      ["pixelcut/background-removal", "Background removal"],
+      ["pixelcut/background-removal", "Background removal, including wave 14 critter concepts"],
       ["fal-ai/birefnet/v2", "Background removal"],
       ["fal-ai/bria/background/remove", "Background removal"]
     ]},
@@ -476,7 +508,7 @@ window.SITE = {
       ["meshy/v7.1/image-to-3d + multi-image-to-3d", "Most props, the eggs and the early creatures"],
       ["fal-ai/meshy/rigging/multi-animation", "The early creature auto-rig. Joints landed badly on round bodies"],
       ["tripo3d/h3.1/multiview-to-3d", "Won the bake-off: the caretaker and all 8 creature stage bodies"],
-      ["tripo3d/h3.1/image-to-3d", "Props"],
+      ["tripo3d/h3.1/image-to-3d", "Props, plus all 52 bugs and fish, the nets, the rods and the display tanks"],
       ["tripo3d/p2/image-to-3d", "Props"],
       ["fal-ai/hunyuan3d-v3/image-to-3d", "Props"],
       ["fal-ai/hyper3d/rodin/v2.5", "Caretaker bake-off entrant, not used"],

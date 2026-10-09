@@ -518,13 +518,62 @@
     </div>
 
     <nav class="toc" aria-label="Sections">
-      <a href="#day8">Days eight and nine</a><a href="#day5">Days five to seven</a><a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
+      <a href="#day10">Days ten and eleven</a><a href="#day8">Days eight and nine</a><a href="#day5">Days five to seven</a><a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
       <a href="#pipeline">fal pipeline</a><a href="#models">Models we use</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
       <a href="#sim">Simulation</a><a href="#playtest">Playtest</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
     </nav>
 
     <section class="block">
       <div class="stats" id="stats"></div>
+    </section>
+
+    <!-- ── SECTION: days ten and eleven (2026-10-08 to 10-09) ── -->
+    <section class="block" id="day10">
+      <div class="section-head"><h2>Days ten and eleven: an HD-2D camera, bugs and fish</h2><span class="hint">2026-10-08 to 10-09 · tilt-shift camera, wave 14</span></div>
+      <div class="glass prose">
+        <p>First, a camera experiment that stuck: a low, long-lens <strong>HD-2D</strong> view in the spirit of Octopath Traveler, with a tilt-shift blur that makes the islands look like a miniature. Kenneth tuned the low version himself, and it's now the default camera.
+        Then <strong>wave 14</strong>, straight from Kenneth's wish list: Animal Crossing-style bugs and fish that change with the seasons and with day and night, a net and a fishing rod with their own animations, and fixes for two creature problems he'd seen in play.</p>
+        <p style="margin-top:10px">Honest status: Kenneth approved the list of 52 bugs and fish and tuned the camera, but the critter models, the tools, the tanks and the new animations are agent work waiting for his review, and the catch timings are first guesses that need a hands-on pass.</p>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">An HD-2D camera</h2><span class="hint">Standard · HD-2D Strong · HD-2D Low</span></div>
+      <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/tilt_modes.webp" alt="Three scenes on the islands, each shown three ways: on the left the standard over-the-shoulder camera with a clear sky; in the middle a high, steep view with heavy blur at the top and bottom of the frame like a miniature model; on the right a low, side-on view of the caretaker by the workshop, the cottage and a landing pad, with the foreground and the far distance softly blurred" /></div>
+        <div class="body"><div class="title-row"><h3>From over the shoulder to a diorama</h3><span class="chip strong">Kenneth tuned</span></div>
+        <p>Left to right: Standard, HD-2D Strong and HD-2D Low, as first shot before Kenneth tuned it. Kenneth: &ldquo;I kind of like the strong one, but I also want one that's actually a lot more like lower angled&hellip; closer to what we have in Octopath&rdquo;.
+        So the dev panel got a live camera tuner, he dialled in Low himself and played on it for several sessions, and his version is now the default. In Low mode, anything that would block your view of the caretaker hides itself until you've passed. The player can switch modes in the phone's Settings.</p>
+        <p style="margin-top:8px">Still rough: hidden objects pop out instead of fading, and tall grass can hide the caretaker's legs.</p></div></div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 14: bugs and fish</h2><span class="hint">Kenneth's ask: Animal Crossing style, by season, day and night</span></div>
+      <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w14_catch.webp" alt="Six in-game frames: a pale green moth flapping in the grass; the caretaker at night on Kettle Island with glowing fireflies; the caretaker fishing at the edge of a turquoise pond; waiting for a bite; the caretaker holding a red and white koi over their head with a card reading You caught a Koi!; and holding up a big blue beetle with a card reading You caught a Solar Rhino Beetle!" /></div>
+        <div class="body"><div class="title-row"><h3>Sneak, swing, cast, hold it up</h3><span class="chip dim">pending review</span></div>
+        <p>Bugs: hold the button to sneak up, then swing the net; rarer bugs startle sooner. Fish are shadows in the water: cast, let the fish nibble, and press when it bites. The net and the rod each come in four tiers, and better tiers reach further or give you longer to react.
+        Every catch ends the Animal Crossing way, held up to the camera with a little card. Each season has five day and five night bugs and fish, following the real calendar, with rain and snow specials. Kettle Island got a pond for it.</p></div></div>
+      <div class="two" style="margin-top:18px">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w14_bugs.webp" alt="A sheet of 24 cute bug models on white: Meadow Butterfly, Lantern Bee, Ladybug, Garden Snail, Pill Bug, Hermit Crab, Woolly Caterpillar, Icecap Beetle, Skyglass Butterfly, Sky Dragonfly, Cicada, Grasshopper, Leaf Mantis, Moon Moth, Glowworm, Velvet Spider, Owl Moth, Ghost Crab, Firefly, Cricket, Orb Spider, Solar Rhino Beetle, Stag Beetle and Lamplight Katydid" /></div>
+          <div class="body"><div class="title-row"><h3>24 bugs</h3><span class="chip strong">Kenneth approved the roster</span></div>
+          <p>Kenneth approved the list of species; the models themselves are still waiting for his review. Each was drawn with nano-banana-pro, cut out with pixelcut and turned into 3D with Tripo H3.1.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w14_fish.webp" alt="A sheet of 24 cute fish and sea creature models on white, including a sand dab, sea bream, mackerel, rainbow trout, seahorse, blue tang, clownfish, ocean sunfish, koi, pufferfish, squid, lanternfish, river eel, octopus, glass shrimp, crayfish, catfish and a coral ray" /></div>
+          <div class="body"><div class="title-row"><h3>24 fish</h3><span class="chip dim">models pending review</span></div>
+          <p>River, pond and sea fish, plus a few friends that aren't strictly fish. Rarity sets what they're worth when shipped. A handful are weaker than the rest, like the glass shrimp and the river eel, and are flagged for Kenneth.</p></div></div>
+      </div>
+      <div class="glass card" style="margin-top:18px"><div class="media wide"><img class="zoom" loading="lazy" src="media/w14_specials.webp" alt="Four pale blue weather specials: a long-legged Puddle Strider, a fluffy Snowdrift Moth with snowflake wings, a spotted Ancient Lobefin and a sleek Glacier Pike" /></div>
+        <div class="body"><h3>Rain and snow specials</h3>
+        <p>Puddle Strider and Ancient Lobefin only show up in the rain; Snowdrift Moth and Glacier Pike only in the snow. They're worth the most.</p></div></div>
+      <div class="glass card" style="margin-top:18px"><div class="media wide"><img class="zoom" loading="lazy" src="media/w14_tanks_pedia.webp" alt="Top row: an aquarium with a koi, a pufferfish, a sunfish and small tropical fish; a glass terrarium with a spider and beetles inside; a creature with a heart over its head after the caretaker gives it a Velvet Spider. Bottom row: the phone album's Critters tab showing caught bugs, caught fish with a koi detail card, and a silhouette for a fish not caught yet, each with Caught 14 / 52" /></div>
+        <div class="body"><div class="title-row"><h3>Show them off, gift them, fill the Critterpedia</h3><span class="chip dim">pending review</span></div>
+        <p>A catch can be shipped in the Supply Crate (Broadmeadow now has one too), gifted or fed to a creature, let go, or put in a craftable aquarium or terrarium. Each creature has a favourite species. The phone album has a new Critterpedia that fills in as you catch, with silhouettes and hints for the ones still out there.</p></div></div>
+      <div class="two" style="margin-top:18px">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w14_anims.webp" alt="Grey mannequin animation frames on a dark background: a bug net swing from wind-up to hit, a fishing rod cast, and a two-handed hold-up of a catch over the head" /></div>
+          <div class="body"><div class="title-row"><h3>New caretaker animations</h3><span class="chip dim">pending review</span></div>
+          <p>Keyed in Blender: the net swing, the rod cast, waiting for a bite, hooking and reeling, and the hold-up. The first rods read as logs in the game, so they were rebuilt slimmer (this sheet still shows the old ones).</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w14_arm_droop.webp" alt="Three grown creatures standing in the meadow, before on top and after below: a blue finned creature and a red winged one hold their arms well out from the body on top, and closer to their sides below" /></div>
+          <div class="body"><div class="title-row"><h3>Creature fixes</h3><span class="chip dim">pending review</span></div>
+          <p>Kenneth saw grown creatures with their arms straight out. It wasn't a T-pose: the shared clips hold the arms about 45 degrees out, which suits a round baby but not a long-armed grown body, so they now droop by 24 degrees (before on top, after below).
+          Creatures also got stuck: now they only head for places they can fully reach, a stuck detector moves them on, and the Broadmeadow bridge reaches dry land on both sides. A 48-hour test run ended with nobody stuck.</p></div></div>
+      </div>
+      <div class="glass prose" style="margin-top:18px">
+        <p>One more thing: in Kenneth's first play of wave 14, the game closed on him when bugs and fish left the world mid-update. That was fixed the same day. Before that fix, everything passed: 147 of 147 sim tests, 149 of 149 Unreal tests and 185 of 185 end-to-end checks.</p>
+      </div>
     </section>
 
     <!-- ── SECTION: days eight and nine (2026-10-04 to 10-05) ── -->
