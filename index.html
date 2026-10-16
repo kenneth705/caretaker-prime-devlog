@@ -508,7 +508,7 @@
             Built in Unreal Engine 5.8 on a Mac by a team of AI agents directed by one person, with every art and
             sound asset generated on fal. This page documents how, including what didn't work.
           </p>
-          <p class="meta-line meta">Work in progress · two playable islands, a real caretaker, creatures that grow up, crafting, gathering and a home base · updated as we go</p>
+          <p class="meta-line meta">Work in progress · two playable islands, a real caretaker, creatures that grow up, crafting and gathering, a house to decorate, farms, and furniture the creatures drag around · updated as we go</p>
         </div>
         <figure class="glass glass-raised hero-art">
           <img class="zoom" src="media/anchor_d_beach.webp" alt="Cel-shaded concept of a lavender crystal-rabbit adult creature holding a fruit on a beach beside a rope-bound pier" />
@@ -518,13 +518,98 @@
     </div>
 
     <nav class="toc" aria-label="Sections">
-      <a href="#day10">Days ten and eleven</a><a href="#day8">Days eight and nine</a><a href="#day5">Days five to seven</a><a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
+      <a href="#day12">Days twelve to sixteen</a><a href="#day10">Days ten and eleven</a><a href="#day8">Days eight and nine</a><a href="#day5">Days five to seven</a><a href="#day4">Day four</a><a href="#day3">Day three</a><a href="#engine-now">In the engine</a><a href="#game">The game</a><a href="#art">Art direction</a><a href="#team">How we build it</a>
       <a href="#pipeline">fal pipeline</a><a href="#models">Models we use</a><a href="#creature">The creature</a><a href="#props">Prop kit</a>
       <a href="#sim">Simulation</a><a href="#playtest">Playtest</a><a href="#engine">Engine lessons</a><a href="#log">Dev log</a><a href="#next">Next</a>
     </nav>
 
     <section class="block">
       <div class="stats" id="stats"></div>
+    </section>
+
+    <!-- ── SECTION: days twelve to sixteen (2026-10-10 to 10-14) ── -->
+    <section class="block" id="day12">
+      <div class="section-head"><h2>Days twelve to sixteen: a house, a shop, and furniture everywhere</h2><span class="hint">2026-10-10 to 10-14 · waves 15 and 16, alpha fixes</span></div>
+      <div class="glass prose">
+        <p>Five busy days. First, fixes from Kenneth's play of wave 14. Then <strong>wave 15, Home &amp; Harvest</strong>: a house of your own, Animal Crossing-style decorating, a shop that drops out of the sky, farms and a boat dock to build.
+        Then a round of <strong>alpha fixes</strong>: a startup splash, a pause menu, and two crashes. Finally <strong>wave 16</strong>, from a single playtest note: furniture goes in your bag, you can put it down anywhere outside, and creatures drag it around.</p>
+        <p style="margin-top:10px">Honest status: Kenneth approved the trailer voice-over and made the design calls quoted below, but most of what's here is agent work. He is playtesting wave 16 right now, and the house, the furniture, the farms and the new animations are still waiting for his review.</p>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Playtest fixes</h2><span class="hint">2026-10-10 · arms at rest, worn paths, water, sand, grass</span></div>
+      <div class="two">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/fix_arms_rest.webp" alt="Two grown creatures, a blue finned one and a red winged one, each shown in five poses. In the before rows their arms hang well out from the body in an A shape; in the after rows the arms rest close to their sides" /></div>
+          <div class="body"><div class="title-row"><h3>Creature arms, second try</h3><span class="chip dim">angles pending review</span></div>
+          <p>The 24 degree droop from wave 14 didn't fix it: Kenneth still saw &ldquo;odd t pose issues&rdquo;. So we dropped the old diagnosis and looked again. Opus and GPT-6 Astra worked on it separately and found the same two causes.
+          Three shared clips lifted the arms 67 to 81 degrees sideways, and the fixed droop still left the slim adults in an A-pose. The clips were re-keyed, and each body now has its own resting angle, as close to the body as it can go without a hand sinking into the torso.
+          On a copy of Kenneth's save, frames with arms out went from 359 to 0. For each creature, the upper row is before and the row under it after.</p></div></div>
+        <div class="glass prose" style="align-self:start">
+          <p><strong>Paths, water, sand and grass.</strong> Worn paths were drawn in blocky steps; their edges are now soft and noisy. Foam rings popped up offshore, which showed as seams in the water. The wet sand ended in a hard dark line and is now a soft pale band. And grass no longer grows on the beach or in the water. <span class="chip dim">pending review</span></p>
+          <p style="margin-top:10px">Not fixed yet: the caretaker's arms can look red. The character outline comes out red, and at the low camera it covers the thin forearms.</p>
+      </div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 15: Home &amp; Harvest</h2><span class="hint">2026-10-11 · a house, decorating, a shop, farms, a dock</span></div>
+      <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w15_house_tiers.webp" alt="Six views of the same plot on Broadmeadow: a torn, overgrown canvas tent on a stone base; the tent repaired with a mailbox and a lantern; a small log cabin with a turf roof and a solar panel; a bigger cabin with a porch and a round window; a cabin with a side wing, a white dome room and an antenna; and the biggest version with a domed upper room and a stone chimney" /></div>
+        <div class="body"><div class="title-row"><h3>A house of your own</h3><span class="chip dim">pending review</span></div>
+        <p>After your first egg hatches, you find a wrecked camp on Broadmeadow. Claim it with materials, then grow it from a tent into a cabin and on up through four tiers. Each tier is a bigger project of materials and Supply Vouchers.
+        The models are Tripo H3.1 multiview builds from one concept, recoloured to the concept's honey-brown. Kenneth asked for the two biggest to be smaller; he still has to look at them.</p></div></div>
+      <div class="two" style="margin-top:18px">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w15_home_inside.webp" alt="A top-down view into a small room with wooden floors: a bed with a striped blanket, a cable-spool table with a lamp, a crate stool, a cushioned two-seat sofa and a checked chair; the caretaker stands on a rug by the door holding a small creature, with a clock on the wall" /></div>
+          <div class="body"><div class="title-row"><h3>Decorating, Animal Crossing style</h3><span class="chip dim">pending review</span></div>
+          <p>The inside of the house is its own little map with a fixed camera per room. Furniture snaps to a 50 cm grid, turns, stacks (a lamp on a table), hangs on walls, and the walls and floors can be swapped. Some pieces can be used: sit, lie down, switch on a lamp, tune a radio.
+          The catalog has 132 pieces, rugs, wallpapers and floors, in six themed series.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w15_shop_pedia.webp" alt="Two phone and shop screens. Left: the Supply Pod Shop with tabs Today's picks, Always in stock, Seeds and Sell, a grid of furniture such as a brass oil lamp, a spindle chair and a ladybug stool with prices in vouchers, and a Buy button. Right: the Critterpedia app on the phone, a grid of bug silhouettes with 0 of 52 caught and a detail card saying where and when to look" /></div>
+          <div class="body"><div class="title-row"><h3>A shop from the sky, and a Critterpedia</h3><span class="chip dim">pending review</span></div>
+          <p>The morning after your first hatch, a supply pod lands. Pry it open and it becomes the Supply Pod Shop: a daily rotation, an always-in-stock list, seeds, and a Sell tab. It's the first thing in the game to spend Supply Vouchers on. The workbench also learned furniture recipes.
+          The Critterpedia moved into its own phone app (C), with a &ldquo;New entry!&rdquo; toast, and the HUD was redone with a time pill, the voucher wallet, a goal card and smaller creature chips.</p></div></div>
+      </div>
+      <div class="glass prose" style="margin-top:18px">
+        <p><strong>Farms.</strong> Crop plots by the house, eight seasonal crops, a watering can, and rain that waters for you. Creatures with the Farmer job work the field. Creatures now only take things from containers outside, and the ones that steal give it back as a gift a day or two later.
+        <strong>The boat dock</strong> is a deliberately big three-stage project (pilings, deck, boat) that ends in a bobbing skiff and a &ldquo;Set sail&rdquo; button that doesn't go anywhere yet.</p>
+        <p style="margin-top:10px"><strong>The art, all made on fal:</strong> 84 furniture meshes, 44 farm props, 154 icons, 48 wall and floor finishes and the house from wreck to tier 4, with nano-banana-pro, the qwen multi-angle edit, Tripo H3.1 multiview and z-image tiling. Up to eight agents worked in parallel. After Kenneth's first look: bridges and docks no longer vanish when you stand on them, icons are never blank when a menu opens, and Kenneth left the voucher sign to us, so it's a V over an S.</p>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Alpha fixes</h2><span class="hint">2026-10-11 and 10-12 · the start of the alpha checklist</span></div>
+      <div class="glass prose">
+        <p>Things a real game needs. A <strong>startup splash</strong> (Squirrel Brain Games, &ldquo;with help from&rdquo; fal, then the title) hides the pop-in while shaders load. A <strong>pause menu</strong> on Esc or Start: resume, settings, save and go back to the title, or save and quit.
+        The <strong>title's options menu</strong> was broken: a button scrolled about 200 pixels between press and release, so clicks missed, and hovering made it blink. Title and pause now share one options panel.</p>
+        <p style="margin-top:10px">The game also <strong>crashed on every exit</strong>. Two console commands had the same name, and Unreal tripped over it while unregistering them on the way out. A test now checks that every command name is unique.
+        <strong>Breeding and rebirth</strong> got a full self-driving test, which found a real bug: after a Farmer creature's rebirth ceremony, every save failed its check and the next load quietly went back to the save from before the ceremony.
+        The caretaker got <strong>21 furniture-use animations</strong> keyed in Blender (sitting, lying down, pulling a lamp chain, tuning a radio; still a few nits, like rockers that don't rock).</p>
+        <p style="margin-top:10px"><span class="chip strong">Kenneth approved</span>&nbsp; <strong>Trailer v4</strong> re-shoots every shot in the current look, with an ElevenLabs voice-over take Kenneth picked.</p>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Wave 16: furniture in the bag, outside, and on the move</h2><span class="hint">2026-10-13 · straight from Kenneth's playtest</span></div>
+      <div class="glass prose">
+        <p>Kenneth, after buying a sofa: &ldquo;I want the furniture to go into inventory like in Animal Crossing&rdquo;, and &ldquo;the reason is I want to be able to put furniture down on the island and creatures can move it&rdquo;. And while he was at it: &ldquo;also let's spin the house around 180 and move the shop next to the nursery entrance&rdquo;.</p>
+        <p style="margin-top:10px">So furniture now lives in the bag, one slot per piece, like Animal Crossing. Shop purchases and workbench crafts land there, and the house drawer stays as overflow.</p>
+      </div>
+      <div class="glass card" style="margin-top:18px"><div class="media wide"><img class="zoom" loading="lazy" src="media/w16_outdoor.webp" alt="Six frames on the beach of Kettle Island with a koi-patterned sofa: a green see-through ghost of the sofa in front of the caretaker; a red ghost near the water where it can't go; the sofa placed on the sand; the caretaker sitting on it; the caretaker pushing it along; and the sofa gone after it was picked back up into the bag" /></div>
+        <div class="body"><div class="title-row"><h3>Put it down anywhere</h3><span class="chip dim">Kenneth is playtesting</span></div>
+        <p>Select a piece in the hotbar and a ghost of it appears in front of you. Walk and turn to move it: green means it fits, red says why not (too close to the water, on the path, bumping into something). Then sit on it, grab and push, pull or turn it, or hold X to pick it back up.
+        It works anywhere walkable on both islands, and the same Koi Sofa can travel with you from one island to the other.</p></div></div>
+      <div class="two" style="margin-top:18px">
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w16_haul.webp" alt="Six frames in the long grass on Kettle Island: a small cream creature walks up to a koi-patterned sofa and starts dragging it; the sofa set down near the incubator with the toast Maple dragged the Koi Sofa over to the incubator; a baby creature carrying a red ladybug stool in front of it; a creature curled up asleep on a beetle-shell bed; and the ladybug stool by itself in the grass with the toast While you were away, Kiwi dragged the Ladybug Stool to the pond" /></div>
+          <div class="body"><div class="title-row"><h3>Creatures move it</h3><span class="chip dim">pending review</span></div>
+          <p>Each creature picks a favourite piece and naps or sways on it. A few times a day it drags it somewhere it likes: to its den when sleepy, next to a friend when lonely, to your door when it's bonded to you, otherwise to the pond or a sunny spot. Then a toast: &ldquo;Maple dragged the Koi Sofa to the pond.&rdquo;
+          It happens while the game is closed too, and you hear about it on return: &ldquo;While you were away&hellip;&rdquo;.</p>
+          <p style="margin-top:8px">Rough edges: creatures walk through big pieces (the furniture doesn't block their paths), the carry pose looks like they're holding the piece over their head, and a baby dragging a sofa is funny. Once a drag got stuck for no clear reason; drags now give up after 12 seconds.</p></div></div>
+        <div class="glass card"><div class="media wide"><img class="zoom" loading="lazy" src="media/w16_layout.webp" alt="Broadmeadow from above, before and after. Left: the cabin faces away from the main path, with the shop pod down in the meadow and long walking lines to it. Right: the cabin is turned around to face the plaza path, and the shop pod stands beside the nursery door under the cliffs, with a short line from shop to house door" /></div>
+          <div class="body"><div class="title-row"><h3>The house turned around</h3><span class="chip dim">Kenneth is playtesting</span></div>
+          <p>Before on the left, after on the right. The house now faces the plaza path with a short path to its door, and the shop stands beside the nursery door, so you see it every time you come out of the hub. The lines show the walk between them. The ground was rebuilt to match.</p></div></div>
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2 style="font-size:17px">Playtest fixes</h2><span class="hint">2026-10-14 · tree bugs, grab and push, pick up indoors</span></div>
+      <div class="glass prose">
+        <p><strong>Tree bugs.</strong> Kenneth: &ldquo;bugs are still hard to catch in trees&rdquo;. The real cause: they were spawning 3.3 m up the trunk, out of the net's reach. Now they sit on the bark at reach height, and a near miss on a tree bug is forgiven.</p>
+        <p style="margin-top:10px"><strong>Grab and push.</strong> Kenneth: &ldquo;you need to be able to move furniture in all 4 directions and I can rotate stuff once then it gets stuck on the wall&rdquo;. Now the direction keys move a held piece that way on screen, push, pull or slide it sideways, and a turn that would swing into the caretaker steps them back a cell instead of refusing.</p>
+        <p style="margin-top:10px"><strong>Pick up indoors.</strong> Kenneth: &ldquo;let's have the same behavior for all furniture everywhere&rdquo;. Hold X now picks any placed piece in the house up into the bag too, along with anything standing on it.</p>
+      </div>
+      <div class="glass prose" style="margin-top:18px">
+        <p>Where it stands: 198 of 198 sim tests and 216 of 216 Unreal tests pass, and the self-driving runs pass 109 of 109 checks in the house-and-harvest run and 194 of 194 in the two-island run. The save is now schema v13, and every old save migrates forward; Kenneth's own save did on first launch.
+        The push itself took three tries: the rebuilt ground's 21 MB of files kept timing out on slow wifi.</p>
+      </div>
     </section>
 
     <!-- ── SECTION: days ten and eleven (2026-10-08 to 10-09) ── -->

@@ -2,19 +2,73 @@
    To update the site, edit this file (and add images to media/), then publish.
    Keep everything a plain JS object (no fetch, works from file://). See UPDATING.md. */
 window.SITE = {
-  updated: "2026-10-09",
+  updated: "2026-10-14",
 
   /* Headline numbers in the stat row. */
   stats: [
-    { label: "Tests", value: "147 + 149", delta: "sim ctest + UE automation, all passing" },
-    { label: "End-to-end", value: "185 / 185", delta: "checks in the self-driving two-island run" },
+    { label: "Tests", value: "198 + 216", delta: "sim ctest + UE automation, all passing" },
+    { label: "End-to-end", value: "109 + 194", delta: "checks in the house-and-harvest and two-island runs" },
     { label: "Bugs & fish", value: "52", delta: "24 bugs, 24 fish and 4 rain or snow specials" },
     { label: "Islands", value: "2 + hub", delta: "plus the race meadow" },
-    { label: "Save schema", value: "v11", delta: "every old save still migrates forward" }
+    { label: "Save schema", value: "v13", delta: "every old save still migrates forward" }
   ],
 
   /* Dev log: newest first. Copy an entry, change the date/title/items. */
   devlog: [
+    {
+      date: "2026-10-14", time: "10:05",
+      title: "Playtest fixes: tree bugs, grab and push, pick up indoors",
+      items: [
+        "Kenneth: “bugs are still hard to catch in trees”. The real cause was where they spawned: 3.3 m up the trunk, out of the net's reach. They now sit on the bark at reach height, and a near miss on a tree bug is forgiven.",
+        "Kenneth: “you need to be able to move furniture in all 4 directions and I can rotate stuff once then it gets stuck on the wall”. The direction keys now move a held piece that way on screen (push, pull or slide), and a turn that would swing into the caretaker steps them back a cell instead of refusing. Indoors and outdoors.",
+        "Kenneth: “let's have the same behavior for all furniture everywhere”. Holding X now picks any placed piece in the house up into the bag, with anything standing on it.",
+        "Verified: 198 of 198 sim tests, 216 of 216 Unreal tests, 109 of 109 checks in the house-and-harvest run and 194 of 194 in the two-island run.",
+        "The push took three tries: the rebuilt ground's 21 MB of files timed out twice on slow wifi before a better connection got it through in a minute."
+      ]
+    },
+    {
+      date: "2026-10-13", time: "22:45",
+      title: "Wave 16: furniture in the bag, outside, and dragged around by creatures",
+      items: [
+        "Kenneth: “I want the furniture to go into inventory like in Animal Crossing”, because “I want to be able to put furniture down on the island and creatures can move it”. Furniture now takes one bag slot per piece, and the house drawer is the overflow.",
+        "Any piece can go down anywhere walkable on either island: a ghost walks with you, green where it fits and red with a reason where it doesn't. Sit on it, push, pull or turn it, or hold X to pick it back up.",
+        "Each creature picks a favourite piece, naps on it, and a few times a day drags it somewhere it likes: its den when sleepy, a friend when lonely, your door when bonded, else the pond or a sunny spot. “Maple dragged the Koi Sofa to the pond.” It happens while the game is closed too (“While you were away…”).",
+        "Also from Kenneth: “let's spin the house around 180 and move the shop next to the nursery entrance”. Done, with the ground rebuilt to match.",
+        "Rough edges: creatures walk through big pieces, the carry pose looks like holding the piece overhead, a baby dragging a sofa is comic, and one drag got stuck for no clear reason (drags now give up after 12 seconds). Kenneth is playtesting it now. The save is schema v13."
+      ]
+    },
+    {
+      date: "2026-10-12", time: "06:45",
+      title: "Alpha fixes: splash, pause menu, an exit crash, breeding tested",
+      items: [
+        "A startup splash covers the pop-in while shaders load, and Esc or Start opens a pause menu: resume, settings, save and go to the title, or save and quit.",
+        "The title's options menu was broken: a button scrolled about 200 pixels between press and release, so clicks missed, and hovering made it blink. Title and pause now share one options panel.",
+        "The game crashed on every exit: two console commands had the same name. One was renamed, and a test now checks that every command name is unique.",
+        "A new self-driving test of breeding and rebirth found a real bug: after a Farmer creature's ceremony every save failed its check, and the next load quietly went back to before the ceremony. Fixed.",
+        "21 furniture-use animations keyed in Blender: sitting, lying down, lamps and radios. Trailer v4 re-shoots everything in the current look, with the voice-over take Kenneth approved."
+      ]
+    },
+    {
+      date: "2026-10-11", time: "08:45",
+      title: "Wave 15: Home & Harvest",
+      items: [
+        "After the first hatch you find a wrecked camp on Broadmeadow. Claim it and grow it from a tent to a four-tier house, each tier a bigger project.",
+        "Inside, Animal Crossing-style decorating: 132 pieces, rugs, wallpapers and floors on a 50 cm grid, with wall pieces, stacking, and furniture you can sit or lie on.",
+        "A supply pod lands the morning after the first hatch and becomes the Supply Pod Shop, the first place to spend Supply Vouchers. Farms with 8 seasonal crops and Farmer creatures, and a big three-stage boat dock project.",
+        "A new HUD, and the Critterpedia as its own phone app. Art on fal: 84 furniture meshes, 44 farm props, 154 icons and 48 wall and floor finishes, with up to eight agents working in parallel.",
+        "After Kenneth's first look: bridges and docks no longer vanish when you stand on them, icons are never blank when a menu opens, and the voucher sign is a V over an S. The house and the art are still waiting for his review."
+      ]
+    },
+    {
+      date: "2026-10-10", time: "17:50",
+      title: "Playtest fixes: creature arms, paths, water and sand",
+      items: [
+        "The wave 14 arm droop didn't work: Kenneth still saw “odd t pose issues”. Opus and GPT-6 Astra each diagnosed it on their own and found the same two causes: three shared clips lifted the arms 67 to 81 degrees sideways, and a fixed droop still left slim adults in an A-pose.",
+        "The clips were re-keyed, and each body now has its own resting angle, as close in as it goes without a hand sinking into the torso. On a copy of Kenneth's save, frames with arms out went from 359 to 0. Two new tests fail on the old behaviour.",
+        "Worn paths were drawn in blocky steps; their edges are now soft. Foam that popped up offshore (the water seams) is gone, the wet sand is a soft pale band instead of a hard line, and no grass grows on the beach.",
+        "Not fixed yet: the caretaker's arms can look red, because the outline colour comes out red on thin forearms at the low camera."
+      ]
+    },
     {
       date: "2026-10-09", time: "14:55",
       title: "Wave 14: creature fixes and a first-play crash",
@@ -478,12 +532,10 @@ window.SITE = {
 
   /* What's next (short, plain). */
   next: [
-    "Kenneth plays wave 14 and reviews the critter models, icons, rods, tank glass and the new animations, plus a few taste calls: bug size, night glow, and the creatures' arm droop.",
-    "A hands-on pass on catch timings, which are still first guesses.",
-    "Ground bugs hide in tall grass, and the Critterpedia assumes the Northern hemisphere.",
-    "Something to spend Supply Vouchers on, and repairing the boat dock and the seed recoverer.",
-    "Crafting Phases B to D: decorating, creatures doing jobs when you ask, then creatures that share ideas and form crews.",
-    "A pause menu, caretaker polish, and finishing the trailer."
+    "Kenneth playtests wave 16: furniture in the bag, putting it down outside, creatures dragging it around, and the turned house and moved shop.",
+    "The alpha checklist: a packaged Mac build, rotating save backups, a first-hour playthrough, and a performance pass.",
+    "A real creature drag animation, and big pieces that creatures walk around instead of through.",
+    "The remaining wave 14 and 15 reviews: the critter models, tanks and animations, the house tiers, the furniture and farm art, and a few taste calls."
   ],
 
   /* Every generation model and agent used so far, grouped by job (from the asset provenance files). */
